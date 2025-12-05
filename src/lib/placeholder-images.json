@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-banner",
+      "description": "Promotional banner for the boutique",
+      "imageUrl": "https://images.unsplash.com/photo-1763824969015-e5d1d6755782?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYXNoaW9uJTIwYm91dGlxdWV8ZW58MHx8fHwxNzY0ODY3MTAzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion boutique"
+    },
+    {
+      "id": "three-piece-1",
+      "description": "Elegant three-piece suit",
+      "imageUrl": "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3b21hbiUyMHN1aXR8ZW58MHx8fHwxNzY0OTcxMjYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman suit"
+    },
+    {
+      "id": "three-piece-2",
+      "description": "Modern three-piece outfit",
+      "imageUrl": "https://images.unsplash.com/photo-1605450081927-6b40c11c661f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxmYXNoaW9uJTIwb3V0Zml0fGVufDB8fHx8MTc2NDk0ODAxMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion outfit"
+    },
+    {
+      "id": "three-piece-3",
+      "description": "Classic three-piece dress",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1564181595228-a5c75430cdac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlbGVnYW50JTIwZHJlc3N8ZW58MHx8fHwxNzY0OTYwOTEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "elegant dress"
+    },
+    {
+      "id": "hijab-1",
+      "description": "Silk hijab",
+      "imageUrl": "https://images.unsplash.com/photo-1625987306773-8b9e554b25e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzaWxrJTIwaGlqYWJ8ZW58MHx8fHwxNzY0ODk4NzEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "silk hijab"
+    },
+    {
+      "id": "hijab-2",
+      "description": "Cotton hijab",
+      "imageUrl": "https://images.unsplash.com/photo-1567141519797-89cc5259823b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb3R0b24lMjBzY2FyZnxlbnwwfHx8fDE3NjQ5NzIxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cotton scarf"
+    },
+    {
+      "id": "hijab-3",
+      "description": "Patterned hijab",
+      "imageUrl": "https://images.unsplash.com/photo-1760727467162-084a855a70f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwYXR0ZXJuZWQlMjBzY2FyZnxlbnwwfHx8fDE3NjQ5NzIyMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "patterned scarf"
+    },
+    {
+      "id": "bedsheet-1",
+      "description": "Luxury bedsheet set",
+      "imageUrl": "https://images.unsplash.com/photo-1760067537116-de1f76fe8f95?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsdXh1cnklMjBiZWRkaW5nfGVufDB8fHx8MTc2NDk3MjIwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury bedding"
+    },
+    {
+      "id": "bedsheet-2",
+      "description": "Floral bedsheet set",
+      "imageUrl": "https://images.unsplash.com/photo-1586917967495-f8f6541166ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmbG9yYWwlMjBiZWRkaW5nfGVufDB8fHx8MTc2NDk3MTI2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "floral bedding"
+    }
+  ]
 }

@@ -1,0 +1,40 @@
+import Image from "next/image";
+import type { Product } from "@/lib/data";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  return (
+    <Card className="overflow-hidden flex flex-col transition-all hover:shadow-lg">
+      <CardHeader className="p-0">
+        <div className="relative aspect-[3/4] w-full">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover"
+            data-ai-hint={product.imageHint}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="p-4 flex-1">
+        <CardTitle className="text-lg font-body font-bold leading-tight tracking-normal">{product.name}</CardTitle>
+        <p className="mt-2 text-lg font-semibold text-primary">BDT {product.price.toLocaleString()}</p>
+      </CardContent>
+      <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row gap-2">
+        <AddToCartButton product={product} variant="outline" className="w-full">
+          Add to Cart
+        </AddToCartButton>
+        <AddToCartButton product={product} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+          Order Now
+        </AddToCartButton>
+      </CardFooter>
+    </Card>
+  );
+}

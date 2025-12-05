@@ -8,7 +8,7 @@ export function ProductCatalog() {
         {categories.map((category) => (
           <section key={category.id} id={category.id} className="scroll-mt-20">
             <h2 className="text-3xl md:text-4xl mb-8 text-center">{category.name}</h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
               {products
                 .filter((product) => product.category === category.id)
                 .map((product) => (

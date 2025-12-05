@@ -7,6 +7,7 @@ const findImage = (id: string) => placeholderImages.find(img => img.id === id) |
 export type Product = {
   id: string;
   name: string;
+  description: string;
   price: number;
   image: string;
   imageHint: string;
@@ -29,6 +30,7 @@ export const products: Product[] = [
   { 
     id: '1', 
     name: 'Elegant Floral Three-Piece', 
+    description: 'A beautifully crafted three-piece suit with an elegant floral design. Made from high-quality fabric for a comfortable and stylish fit, perfect for any occasion.',
     price: 3200, 
     image: findImage('three-piece-1').imageUrl,
     imageHint: findImage('three-piece-1').imageHint,
@@ -38,6 +40,7 @@ export const products: Product[] = [
   { 
     id: '2', 
     name: 'Modern Silk Three-Piece', 
+    description: 'Experience luxury with our modern silk three-piece. The smooth texture and contemporary design make it a standout choice for formal events and celebrations.',
     price: 4500, 
     image: findImage('three-piece-2').imageUrl,
     imageHint: findImage('three-piece-2').imageHint,
@@ -47,6 +50,7 @@ export const products: Product[] = [
   { 
     id: '3', 
     name: 'Classic Cotton Three-Piece', 
+    description: 'Our classic cotton three-piece offers timeless style and unbeatable comfort. Ideal for daily wear, it combines traditional aesthetics with modern tailoring.',
     price: 2800, 
     image: findImage('three-piece-3').imageUrl,
     imageHint: findImage('three-piece-3').imageHint,
@@ -56,6 +60,7 @@ export const products: Product[] = [
   {
     id: '9',
     name: 'Chic Summer Three-Piece',
+    description: 'Stay cool and chic with our summer collection. This lightweight and breathable three-piece is perfect for warm weather, featuring a vibrant and breezy design.',
     price: 3800,
     image: findImage('three-piece-4').imageUrl,
     imageHint: findImage('three-piece-4').imageHint,
@@ -65,6 +70,7 @@ export const products: Product[] = [
   { 
     id: '4', 
     name: 'Premium Silk Hijab', 
+    description: 'Drape yourself in elegance with our premium silk hijab. Its soft, lustrous finish adds a touch of sophistication to any outfit.',
     price: 1200, 
     image: findImage('hijab-1').imageUrl,
     imageHint: findImage('hijab-1').imageHint,
@@ -74,6 +80,7 @@ export const products: Product[] = [
   { 
     id: '5', 
     name: 'Soft Cotton Hijab', 
+    description: 'Comfortable and versatile, our soft cotton hijab is a wardrobe essential. Available in a variety of colors to match your style.',
     price: 800, 
     image: findImage('hijab-2').imageUrl,
     imageHint: findImage('hijab-2').imageHint,
@@ -83,6 +90,7 @@ export const products: Product[] = [
   { 
     id: '6', 
     name: 'Georgette Patterned Hijab', 
+    description: 'Make a statement with this beautiful georgette hijab, featuring a unique pattern that adds a fashionable touch to your look.',
     price: 950, 
     image: findImage('hijab-3').imageUrl,
     imageHint: findImage('hijab-3').imageHint,
@@ -92,6 +100,7 @@ export const products: Product[] = [
   { 
     id: '7', 
     name: 'Luxury King Size Bedsheet', 
+    description: 'Transform your bedroom into a sanctuary with our luxury king-size bedsheet set. Made from premium materials for a soft and comfortable night\'s sleep.',
     price: 5500, 
     image: findImage('bedsheet-1').imageUrl,
     imageHint: findImage('bedsheet-1').imageHint,
@@ -101,6 +110,7 @@ export const products: Product[] = [
   { 
     id: '8', 
     name: 'Floral Print Bedsheet', 
+    description: 'Brighten up your bedroom with our beautiful floral print bedsheet. The vibrant design and soft fabric create a cheerful and inviting atmosphere.',
     price: 3500, 
     image: findImage('bedsheet-2').imageUrl,
     imageHint: findImage('bedsheet-2').imageHint,

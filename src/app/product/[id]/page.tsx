@@ -18,7 +18,6 @@ import { ProductCard } from '@/components/sections/product-card';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Card, CardContent } from '@/components/ui/card';
 
 // Even in a client component, params can be a promise.
 // We can use `React.use` to unwrap it.
@@ -157,6 +156,10 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                   Order Now
                 </AddToCartButton>
               </div>
+                <div className="mt-8 space-y-4">
+                    <h2 className="text-xl font-semibold">Product Description</h2>
+                    <p className="text-muted-foreground">{product.description}</p>
+                </div>
             </div>
           </div>
 

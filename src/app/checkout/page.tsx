@@ -50,7 +50,7 @@ const bangladeshDistricts = [
 
 const formSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters.'),
-  phoneNumber: z.string().regex(/^01[0-9]{9}$/, 'Please enter a valid 11-digit number starting with 01.'),
+  phoneNumber: z.string().regex(/^01[0-9]{9}$/, 'Please enter a valid 11-digit phone number starting with 01.'),
   city: z.string().min(1, 'Please select a district.'),
   fullAddress: z.string().min(10, 'Full address must be at least 10 characters.'),
 });

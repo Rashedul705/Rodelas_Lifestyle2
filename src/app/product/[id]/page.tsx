@@ -156,6 +156,14 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                   Order Now
                 </AddToCartButton>
               </div>
+
+               <div className="mt-8">
+                <h2 className="text-xl font-semibold">Product Highlights:</h2>
+                <div className="prose prose-sm max-w-none text-muted-foreground mt-2">
+                   <p>{product.description}</p>
+                </div>
+             </div>
+
             </div>
           </div>
           

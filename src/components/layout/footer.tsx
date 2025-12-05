@@ -46,13 +46,25 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Social Links */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Stay Updated</h4>
-            <p className="text-muted-foreground">Subscribe to our newsletter for the latest arrivals and offers.</p>
-            <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input type="email" placeholder="Your email" className="bg-background" />
-                <Button type="submit" className="bg-accent hover:bg-accent/90 text-accent-foreground">Subscribe</Button>
+            <h4 className="text-lg font-semibold">Follow Us</h4>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="#" aria-label="Facebook">
+                  <Facebook className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="#" aria-label="Instagram">
+                  <Instagram className="h-5 w-5" />
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="#" aria-label="YouTube">
+                  <Youtube className="h-5 w-5" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -65,16 +77,6 @@ export function Footer() {
             <Button variant="ghost" size="icon" asChild>
               <Link href="#" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="#" aria-label="Instagram">
-                <Instagram className="h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="#" aria-label="YouTube">
-                <Youtube className="h-5 w-5" />
               </Link>
             </Button>
           </div>

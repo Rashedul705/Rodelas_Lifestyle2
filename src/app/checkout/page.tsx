@@ -238,7 +238,9 @@ export default function CheckoutPage() {
                                             <div className="flex-1">
                                                 <p className="text-sm font-medium leading-tight">{item.product.name}</p>
                                                 <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
-                                                <p className="text-sm font-medium">BDT {(item.product.price * item.quantity).toLocaleString()}</p>
+                                            </div>
+                                            <div className="text-sm font-medium">
+                                                {(item.product.price * item.quantity).toLocaleString()}
                                             </div>
                                         </div>
                                     ))}

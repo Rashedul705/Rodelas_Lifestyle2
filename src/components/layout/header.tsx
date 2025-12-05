@@ -1,11 +1,20 @@
+
 "use client";
 
 import Link from "next/link";
-import { Phone, Search, ShoppingCart, Menu } from "lucide-react";
+import { Search, ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/components/cart/cart-context";
 import { CartSheet } from "@/components/cart/cart-sheet";
+
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        <path d="M14.05 16.95A8.91 8.91 0 0 1 12.03 18c-2.61 0-4.93-1.63-5.9-4" />
+    </svg>
+);
+
 
 export function Header() {
   const { cart } = useCart();
@@ -37,8 +46,11 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="WhatsApp">
-              <Phone className="h-5 w-5" />
+            <Button variant="ghost" asChild className="text-accent-foreground bg-accent hover:bg-accent/90">
+                <Link href="https://wa.me/8801776180359" target="_blank">
+                    <WhatsAppIcon className="h-5 w-5 mr-2" />
+                    01776180359
+                </Link>
             </Button>
             <Button variant="ghost" size="icon" aria-label="Search">
               <Search className="h-5 w-5" />
@@ -82,8 +94,11 @@ export function Header() {
                     <Link href="/admin" className="text-muted-foreground hover:text-foreground">Admin</Link>
                   </nav>
                   <div className="mt-4 flex items-center gap-4">
-                    <Button variant="outline" size="icon" aria-label="WhatsApp">
-                      <Phone className="h-5 w-5" />
+                     <Button variant="outline" asChild>
+                        <Link href="https://wa.me/8801776180359" target="_blank">
+                            <WhatsAppIcon className="h-5 w-5 mr-2" />
+                            WhatsApp
+                        </Link>
                     </Button>
                     <Button variant="outline" size="icon" aria-label="Search">
                       <Search className="h-5 w-5" />

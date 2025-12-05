@@ -218,6 +218,15 @@ export default function CheckoutPage() {
                                 <div className="space-y-3">
                                     {cart.map(item => (
                                         <div key={item.product.id} className="flex items-center gap-4">
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="h-6 w-6 rounded-full"
+                                                onClick={() => removeFromCart(item.product.id)}
+                                            >
+                                                <X className="h-4 w-4" />
+                                                <span className="sr-only">Remove item</span>
+                                            </Button>
                                             <div className="relative h-16 w-16 rounded-md overflow-hidden">
                                                 <Image 
                                                     src={item.product.image} 
@@ -231,15 +240,6 @@ export default function CheckoutPage() {
                                                 <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                                                 <p className="text-sm font-medium">BDT {(item.product.price * item.quantity).toLocaleString()}</p>
                                             </div>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="text-muted-foreground h-8 w-8"
-                                                onClick={() => removeFromCart(item.product.id)}
-                                            >
-                                                <X className="h-4 w-4" />
-                                                <span className="sr-only">Remove item</span>
-                                            </Button>
                                         </div>
                                     ))}
                                 </div>

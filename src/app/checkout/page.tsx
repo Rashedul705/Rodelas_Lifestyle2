@@ -30,6 +30,7 @@ import { Footer } from '@/components/layout/footer';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { X } from 'lucide-react';
 
 const bangladeshDistricts = [
   'Bagerhat', 'Bandarban', 'Barguna', 'Barishal', 'Bhola', 'Bogra',
@@ -55,7 +56,7 @@ const formSchema = z.object({
 });
 
 export default function CheckoutPage() {
-  const { cart, clearCart } = useCart();
+  const { cart, clearCart, removeFromCart } = useCart();
   const { toast } = useToast();
   const router = useRouter();
   const [shippingCharge, setShippingCharge] = useState<number | null>(null);
@@ -228,8 +229,17 @@ export default function CheckoutPage() {
                                             <div className="flex-1">
                                                 <p className="text-sm font-medium leading-tight">{item.product.name}</p>
                                                 <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                                                <p className="text-sm font-medium">BDT {(item.product.price * item.quantity).toLocaleString()}</p>
                                             </div>
-                                            <p className="text-sm font-medium">BDT {(item.product.price * item.quantity).toLocaleString()}</p>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-muted-foreground h-8 w-8"
+                                                onClick={() => removeFromCart(item.product.id)}
+                                            >
+                                                <X className="h-4 w-4" />
+                                                <span className="sr-only">Remove item</span>
+                                            </Button>
                                         </div>
                                     ))}
                                 </div>
@@ -279,5 +289,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    

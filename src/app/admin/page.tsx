@@ -148,7 +148,7 @@ export default function AdminDashboardPage() {
                                             </div>
                                             <DialogFooter>
                                                 <Button asChild>
-                                                    <Link href={`/admin/invoice/${order.id}`} target="_blank">
+                                                    <Link href={`/admin/invoice/${order.id}`}>
                                                         <Printer className="mr-2 h-4 w-4" />
                                                         Print Invoice
                                                     </Link>

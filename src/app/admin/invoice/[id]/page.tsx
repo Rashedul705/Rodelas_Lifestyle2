@@ -29,7 +29,7 @@ export default function InvoicePage({ params }: InvoicePageProps) {
   const subtotal = order.products.reduce((acc, p) => acc + p.price * p.quantity, 0);
 
   return (
-    <div className="bg-white text-black min-h-screen">
+    <div className="bg-white text-black min-h-screen font-mono">
       <style jsx global>{`
         @media print {
           body {
@@ -40,79 +40,71 @@ export default function InvoicePage({ params }: InvoicePageProps) {
             display: none;
           }
         }
+        @page {
+          size: 80mm auto;
+          margin: 0.5cm;
+        }
       `}</style>
-      <div className="max-w-4xl mx-auto p-8 sm:p-12 print:p-8">
-        <header className="flex justify-between items-center pb-8 border-b">
-          <div>
-            <h1 className="text-3xl font-bold">Rodelas lifestyle</h1>
-            <p>Your destination for premium apparel.</p>
-          </div>
-          <div className="text-right">
-            <h2 className="text-3xl font-bold uppercase text-gray-700">Invoice</h2>
-            <p className="text-gray-500">{order.id}</p>
-          </div>
+      <div className="max-w-[80mm] mx-auto p-2">
+        <header className="text-center pb-2 border-b border-dashed border-black">
+          <h1 className="text-xl font-bold">Rodelas lifestyle</h1>
+          <p className="text-xs">Your destination for premium apparel.</p>
         </header>
 
-        <section className="grid sm:grid-cols-2 gap-8 my-8">
-          <div>
-            <h3 className="font-semibold mb-2">Bill To:</h3>
-            <p className="font-bold">{order.customer}</p>
+        <section className="text-xs my-2">
+            <p><strong>Invoice:</strong> {order.id}</p>
+            <p><strong>Date:</strong> {new Date(order.date).toLocaleDateString()}</p>
+            <p><strong>Status:</strong> {order.status}</p>
+        </section>
+
+        <section className="text-xs my-2 border-y border-dashed border-black py-2">
+            <p className="font-bold">Bill To:</p>
+            <p>{order.customer}</p>
             <p>{order.address}</p>
             <p>{order.phone}</p>
-          </div>
-          <div className="text-right">
-            <h3 className="font-semibold mb-2">Invoice Details:</h3>
-            <p><span className="font-semibold">Date:</span> {new Date(order.date).toLocaleDateString()}</p>
-            <p><span className="font-semibold">Status:</span> {order.status}</p>
-          </div>
         </section>
 
         <section>
-          <table className="w-full text-left">
+          <table className="w-full text-xs">
             <thead>
-              <tr className="bg-gray-100">
-                <th className="p-3 font-semibold">Product</th>
-                <th className="p-3 font-semibold text-center">Quantity</th>
-                <th className="p-3 font-semibold text-right">Price</th>
-                <th className="p-3 font-semibold text-right">Total</th>
+              <tr className="border-b border-dashed border-black">
+                <th className="p-1 font-bold text-left">Item</th>
+                <th className="p-1 font-bold text-center">Qty</th>
+                <th className="p-1 font-bold text-right">Total</th>
               </tr>
             </thead>
             <tbody>
               {order.products.map((product, index) => (
-                <tr key={index} className="border-b">
-                  <td className="p-3">{product.name}</td>
-                  <td className="p-3 text-center">{product.quantity}</td>
-                  <td className="p-3 text-right">BDT {product.price.toLocaleString()}</td>
-                  <td className="p-3 text-right">BDT {(product.price * product.quantity).toLocaleString()}</td>
+                <tr key={index}>
+                  <td className="p-1">{product.name}</td>
+                  <td className="p-1 text-center">{product.quantity}</td>
+                  <td className="p-1 text-right">{(product.price * product.quantity).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </section>
 
-        <section className="flex justify-end mt-8">
-          <div className="w-full sm:w-1/2 md:w-1/3 space-y-4">
-             <div className="flex justify-between">
+        <section className="mt-2 border-t border-dashed border-black pt-2 text-xs">
+            <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span className="font-medium">BDT {subtotal.toLocaleString()}</span>
+                <span className="font-medium">{subtotal.toLocaleString()}</span>
             </div>
              <div className="flex justify-between">
                 <span>Shipping</span>
-                <span className="font-medium">BDT {(parseInt(order.amount) - subtotal).toLocaleString()}</span>
+                <span className="font-medium">{(parseInt(order.amount) - subtotal).toLocaleString()}</span>
             </div>
-            <Separator />
-            <div className="flex justify-between text-xl font-bold">
+            <div className="flex justify-between font-bold text-sm mt-1">
                 <span>Total</span>
                 <span>BDT {parseInt(order.amount).toLocaleString()}</span>
             </div>
-          </div>
         </section>
 
-        <footer className="mt-16 text-center text-gray-500 border-t pt-8">
+        <footer className="mt-4 text-center text-xs border-t border-dashed border-black pt-2">
           <p>Thank you for your business!</p>
           <p>Questions? Contact us at support@rodelas.com</p>
-           <div className="mt-8 no-print">
-              <Button onClick={() => window.print()}>
+           <div className="mt-4 no-print">
+              <Button onClick={() => window.print()} size="sm">
                   <Printer className="mr-2 h-4 w-4" />
                   Print Invoice
               </Button>

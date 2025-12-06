@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { LayoutDashboard, ShoppingCart, Package, FileText, Home, Tags, Truck, MessageSquare } from "lucide-react";
-import { SheetClose } from "@/components/ui/sheet";
+import { Sidebar, SidebarClose } from "@/components/ui/sidebar";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: <LayoutDashboard /> },
@@ -17,50 +17,46 @@ const adminNavItems = [
   { href: "/admin/content", label: "Content", icon: <FileText /> },
 ];
 
-type AdminSidebarProps = {
-  isMobile?: boolean;
-};
-
-export function AdminSidebar({ isMobile = false }: AdminSidebarProps) {
+export function AdminSidebar() {
   const pathname = usePathname();
 
-  const NavWrapper = isMobile ? SheetClose : React.Fragment;
-  const navWrapperProps = isMobile ? { asChild: true } : {};
-
-
   return (
-    <div className="flex h-full max-h-screen flex-col gap-2">
-      <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-        <Link href="/admin" className="flex items-center gap-2 font-semibold">
-          <span className="">Admin Panel</span>
-        </Link>
+    <Sidebar>
+      <div className="flex h-full max-h-screen flex-col gap-2">
+        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+          <Link href="/admin" className="flex items-center gap-2 font-semibold">
+            <span className="">Admin Panel</span>
+          </Link>
+        </div>
+        <div className="flex-1">
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            {adminNavItems.map((item) => (
+              <SidebarClose asChild key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
+                    pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))
+                      ? 'bg-muted text-primary'
+                      : ''
+                  }`}
+                >
+                  {React.cloneElement(item.icon, { className: "h-4 w-4" })}
+                  {item.label}
+                </Link>
+              </SidebarClose>
+            ))}
+             <SidebarClose asChild>
+               <Link
+                  href="/"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <Home className="h-4 w-4" />
+                  Storefront
+                </Link>
+              </SidebarClose>
+          </nav>
+        </div>
       </div>
-      <div className="flex-1">
-        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-          {adminNavItems.map((item) => (
-            <NavWrapper {...navWrapperProps} key={item.href}>
-              <Link
-                href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${
-                  (pathname.startsWith(item.href) && (item.href !== "/admin" || pathname === "/admin")) ? 'bg-muted text-primary' : ''
-                }`}
-              >
-                {React.cloneElement(item.icon, { className: "h-4 w-4" })}
-                {item.label}
-              </Link>
-            </NavWrapper>
-          ))}
-           <NavWrapper {...navWrapperProps}>
-             <Link
-                href="/"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Storefront
-              </Link>
-            </NavWrapper>
-        </nav>
-      </div>
-    </div>
+    </Sidebar>
   );
 }

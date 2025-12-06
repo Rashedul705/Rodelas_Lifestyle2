@@ -40,10 +40,14 @@ import { products, categories } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
+type StockStatus = 'all' | 'in-stock' | 'low-stock' | 'out-of-stock';
+
 export default function AdminProductsPage() {
     
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [showLowStock, setShowLowStock] = useState(false);
+    const [stockStatus, setStockStatus] = useState<StockStatus>('all');
+    const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
 
     const getCategoryName = (categoryId: string) => {
         const category = categories.find(c => c.id === categoryId);
@@ -52,9 +56,30 @@ export default function AdminProductsPage() {
 
     const filteredProducts = products.filter(product => {
         const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
-        const stockMatch = !showLowStock || product.stock < 5;
+        
+        const stockMatch = stockStatus === 'all' ||
+            (stockStatus === 'in-stock' && product.stock > 5) ||
+            (stockStatus === 'low-stock' && product.stock > 0 && product.stock <= 5) ||
+            (stockStatus === 'out-of-stock' && product.stock === 0);
+
         return categoryMatch && stockMatch;
     });
+
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            setSelectedProducts(filteredProducts.map(p => p.id));
+        } else {
+            setSelectedProducts([]);
+        }
+    };
+
+    const handleSelectProduct = (productId: string, checked: boolean) => {
+        if (checked) {
+            setSelectedProducts(prev => [...prev, productId]);
+        } else {
+            setSelectedProducts(prev => prev.filter(id => id !== productId));
+        }
+    };
 
     return (
         <div className="flex flex-col">
@@ -70,38 +95,60 @@ export default function AdminProductsPage() {
             <main className="flex-1 p-6">
                 <Card>
                     <CardHeader>
-                        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                            <div>
-                                <CardTitle>All Products</CardTitle>
-                                <CardDescription>Manage your products and view their sales performance.</CardDescription>
-                            </div>
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="low-stock" checked={showLowStock} onCheckedChange={(checked) => setShowLowStock(!!checked)} />
-                                    <Label htmlFor="low-stock">Filter low stock</Label>
-                                </div>
-                                <div className="w-full sm:w-auto">
-                                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                                        <SelectTrigger className="w-full sm:w-[180px]">
-                                            <SelectValue placeholder="Filter by category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">All Products</SelectItem>
-                                            {categories.map(category => (
-                                                <SelectItem key={category.id} value={category.id}>
-                                                    {category.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </div>
+                        
+                        <CardTitle>All Products</CardTitle>
+                        <CardDescription>Manage your products and view their sales performance.</CardDescription>
+                       
                     </CardHeader>
                     <CardContent>
+                         <div className="flex flex-wrap items-center gap-2 mb-4">
+                            <Select>
+                                <SelectTrigger className="w-auto">
+                                    <SelectValue placeholder="Bulk actions" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="delete">Delete Selected</SelectItem>
+                                    <SelectItem value="mark-in-stock">Mark as In Stock</SelectItem>
+                                    <SelectItem value="mark-out-of-stock">Mark as Out of Stock</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="outline">Apply</Button>
+                            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                                <SelectTrigger className="w-auto">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Categories</SelectItem>
+                                    {categories.map(category => (
+                                        <SelectItem key={category.id} value={category.id}>
+                                            {category.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                             <Select value={stockStatus} onValueChange={(value) => setStockStatus(value as StockStatus)}>
+                                <SelectTrigger className="w-auto">
+                                    <SelectValue placeholder="Filter by stock status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Stock Statuses</SelectItem>
+                                    <SelectItem value="in-stock">In Stock</SelectItem>
+                                    <SelectItem value="low-stock">Low Stock</SelectItem>
+                                    <SelectItem value="out-of-stock">Out of Stock</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button>Filter</Button>
+                        </div>
                         <Table>
                             <TableHeader>
                                 <TableRow>
+                                    <TableHead className="w-12">
+                                        <Checkbox 
+                                            onCheckedChange={handleSelectAll}
+                                            checked={selectedProducts.length > 0 && selectedProducts.length === filteredProducts.length}
+                                            aria-label="Select all rows"
+                                        />
+                                    </TableHead>
                                     <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
                                     <TableHead>Name</TableHead>
                                     <TableHead>Category</TableHead>
@@ -114,7 +161,14 @@ export default function AdminProductsPage() {
                             </TableHeader>
                             <TableBody>
                                 {filteredProducts.map(product => (
-                                     <TableRow key={product.id}>
+                                     <TableRow key={product.id} data-state={selectedProducts.includes(product.id) ? 'selected' : undefined}>
+                                        <TableCell>
+                                            <Checkbox 
+                                                checked={selectedProducts.includes(product.id)}
+                                                onCheckedChange={(checked) => handleSelectProduct(product.id, !!checked)}
+                                                aria-label={`Select row for ${product.name}`}
+                                            />
+                                        </TableCell>
                                         <TableCell className="hidden sm:table-cell">
                                             <Image src={product.image} alt={product.name} width={60} height={60} className="rounded-md object-cover" />
                                         </TableCell>

@@ -101,7 +101,7 @@ export default function AdminCustomersPage() {
               </TableHeader>
               <TableBody>
                 {customers.map((customer) => (
-                  <TableRow key={customer.phone}>
+                  <TableRow key={`${customer.name}-${customer.phone}`}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">

@@ -25,20 +25,55 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+
+const formSchema = z.object({
+  name: z.string().min(1, "Product name is required."),
+  description: z.string().min(1, "Description is required."),
+  highlights: z.string().min(1, "Product highlights are required."),
+  price: z.coerce.number().min(1, "Price must be greater than 0."),
+  category: z.string().min(1, "Please select a category."),
+  stock: z.coerce.number().min(0, "Stock can't be negative."),
+  picture: z.any().refine((files) => files?.length === 1, "Featured image is required."),
+  gallery: z.any().optional(),
+});
+
 
 export default function NewProductPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const productData = Object.fromEntries(formData.entries());
-    console.log("New Product Data:", productData);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      highlights: "",
+      price: 0,
+      category: "",
+      stock: 10,
+      gallery: undefined,
+      picture: undefined,
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("New Product Data:", values);
 
     toast({
       title: "Product Saved!",
-      description: `${productData.name} has been added to the store.`,
+      description: `${values.name} has been added to the store.`,
     });
     
     // In a real app, you'd save this to a database.
@@ -60,81 +95,153 @@ export default function NewProductPage() {
         </div>
       </header>
       <main className="flex-1 p-6">
-        <form onSubmit={handleSubmit}>
-          <Card className="max-w-4xl mx-auto">
-            <CardHeader>
-              <CardTitle>Product Details</CardTitle>
-              <CardDescription>
-                Fill out the form below to add a new product to your store.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="name">Product Name</Label>
-                  <Input id="name" name="name" type="text" placeholder="e.g. Elegant Floral Three-Piece" />
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <Card className="max-w-4xl mx-auto">
+              <CardHeader>
+                <CardTitle>Product Details</CardTitle>
+                <CardDescription>
+                  Fill out the form below to add a new product to your store.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g. Elegant Floral Three-Piece" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="description"
-                    placeholder="A beautifully crafted three-piece suit..."
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="A beautifully crafted three-piece suit..."
+                            {...field}
+                          />
+                        </FormControl>
+                         <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="highlights">Product Highlights</Label>
-                  <Textarea
-                    id="highlights"
+                  <FormField
+                    control={form.control}
                     name="highlights"
-                    placeholder="e.g.&#10;- Made from 100% premium cotton&#10;- Features intricate embroidery"
-                    rows={4}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product Highlights</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="e.g.&#10;- Made from 100% premium cotton&#10;- Features intricate embroidery"
+                            rows={4}
+                            {...field}
+                          />
+                        </FormControl>
+                         <FormMessage />
+                      </FormItem>
+                    )}
                   />
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Price (BDT)</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="e.g. 3200" {...field} />
+                          </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                             <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a category" />
+                              </SelectTrigger>
+                             </FormControl>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem key={category.id} value={category.id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                     <FormField
+                      control={form.control}
+                      name="picture"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Featured Image</FormLabel>
+                           <FormControl>
+                            <Input type="file" accept="image/*" {...form.register('picture')} />
+                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="gallery"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Product Gallery (Optional)</FormLabel>
+                          <FormControl>
+                            <Input type="file" multiple {...form.register('gallery')} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="stock"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Stock Quantity</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="e.g. 25" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="grid gap-3">
-                    <Label htmlFor="price">Price (BDT)</Label>
-                    <Input id="price" name="price" type="number" placeholder="e.g. 3200" />
-                  </div>
-                  <div className="grid gap-3">
-                    <Label htmlFor="category">Category</Label>
-                    <Select name="category">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="grid gap-3">
-                      <Label htmlFor="picture">Featured Image</Label>
-                      <Input id="picture" name="picture" type="file" />
-                  </div>
-                  <div className="grid gap-3">
-                      <Label htmlFor="gallery">Product Gallery</Label>
-                      <Input id="gallery" name="gallery" type="file" multiple />
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="grid gap-3">
-                      <Label htmlFor="stock">Stock Quantity</Label>
-                      <Input id="stock" name="stock" type="number" placeholder="e.g. 25" defaultValue="10" />
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="justify-end">
-              <Button type="submit">Save Product</Button>
-            </CardFooter>
-          </Card>
-        </form>
+              </CardContent>
+              <CardFooter className="justify-end">
+                <Button type="submit">Save Product</Button>
+              </CardFooter>
+            </Card>
+          </form>
+        </Form>
       </main>
     </div>
   );

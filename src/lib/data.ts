@@ -151,9 +151,9 @@ export const faqs = [
 ];
 
 export const recentOrders: Order[] = [
-    { id: 'ORD001', customer: 'Sadia Islam', phone: '017********', address: 'Rajshahi', amount: '2800', status: 'Delivered', products: [{ name: 'Classic Cotton Three-Piece', quantity: 1, price: 2800 }], date: '2024-07-28' },
-    { id: 'ORD002', customer: 'Karim Ahmed', phone: '018********', address: 'Dhaka', amount: '1200', status: 'Shipped', products: [{ name: 'Premium Silk Hijab', quantity: 1, price: 1200 }], date: '2024-07-28' },
-    { id: 'ORD003', customer: 'Nusrat Jahan', phone: '019********', address: 'Chittagong', amount: '4500', status: 'Processing', products: [{ name: 'Modern Silk Three-Piece', quantity: 1, price: 4500 }], date: '2024-07-27' },
-    { id: 'ORD004', customer: 'Rahim Sheikh', phone: '016********', address: 'Sylhet', amount: '3500', status: 'Pending', products: [{ name: 'Floral Print Bedsheet', quantity: 1, price: 3500 }], date: '2024-07-27' },
-    { id: 'ORD005', customer: 'Farhana Begum', phone: '015********', address: 'Rajshahi', amount: '800', status: 'Cancelled', products: [{ name: 'Soft Cotton Hijab', quantity: 1, price: 800 }], date: '2024-07-26' },
+    { id: 'ORD001', customer: 'Sadia Islam', phone: '01712345678', address: 'Rajshahi', amount: '2800', status: 'Delivered', products: [{ name: 'Classic Cotton Three-Piece', quantity: 1, price: 2800 }], date: '2024-07-28' },
+    { id: 'ORD002', customer: 'Karim Ahmed', phone: '01823456789', address: 'Dhaka', amount: '1200', status: 'Shipped', products: [{ name: 'Premium Silk Hijab', quantity: 1, price: 1200 }], date: '2024-07-28' },
+    { id: 'ORD003', customer: 'Nusrat Jahan', phone: '01934567890', address: 'Chittagong', amount: '4500', status: 'Processing', products: [{ name: 'Modern Silk Three-Piece', quantity: 1, price: 4500 }], date: '2024-07-27' },
+    { id: 'ORD004', customer: 'Rahim Sheikh', phone: '01645678901', address: 'Sylhet', amount: '3500', status: 'Pending', products: [{ name: 'Floral Print Bedsheet', quantity: 1, price: 3500 }], date: '2024-07-27' },
+    { id: 'ORD005', customer: 'Farhana Begum', phone: '01556789012', address: 'Rajshahi', amount: '800', status: 'Cancelled', products: [{ name: 'Soft Cotton Hijab', quantity: 1, price: 800 }], date: '2024-07-26' },
 ];

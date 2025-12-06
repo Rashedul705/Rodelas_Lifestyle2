@@ -32,11 +32,11 @@ import {
 } from "@/components/ui/select"
 
 const orders = [
-    { id: 'ORD001', customer: 'Sadia Islam', phone: '017********', address: 'Rajshahi', products: 'Classic Cotton Three-Piece', amount: '2,800', status: 'Delivered' },
-    { id: 'ORD002', customer: 'Karim Ahmed', phone: '018********', address: 'Dhaka', products: 'Premium Silk Hijab', amount: '1,200', status: 'Shipped' },
-    { id: 'ORD003', customer: 'Nusrat Jahan', phone: '019********', address: 'Chittagong', products: 'Modern Silk Three-Piece', amount: '4,500', status: 'Processing' },
-    { id: 'ORD004', customer: 'Rahim Sheikh', phone: '016********', address: 'Sylhet', products: 'Floral Print Bedsheet', amount: '3,500', status: 'Pending' },
-    { id: 'ORD005', customer: 'Farhana Begum', phone: '015********', address: 'Rajshahi', products: 'Soft Cotton Hijab', amount: '800', status: 'Cancelled' },
+    { id: 'ORD001', customer: 'Sadia Islam', phone: '01712345678', address: 'Rajshahi', products: 'Classic Cotton Three-Piece', amount: '2,800', status: 'Delivered' },
+    { id: 'ORD002', customer: 'Karim Ahmed', phone: '01823456789', address: 'Dhaka', products: 'Premium Silk Hijab', amount: '1,200', status: 'Shipped' },
+    { id: 'ORD003', customer: 'Nusrat Jahan', phone: '01934567890', address: 'Chittagong', products: 'Modern Silk Three-Piece', amount: '4,500', status: 'Processing' },
+    { id: 'ORD004', customer: 'Rahim Sheikh', phone: '01645678901', address: 'Sylhet', products: 'Floral Print Bedsheet', amount: '3,500', status: 'Pending' },
+    { id: 'ORD005', customer: 'Farhana Begum', phone: '01556789012', address: 'Rajshahi', products: 'Soft Cotton Hijab', amount: '800', status: 'Cancelled' },
 ];
 
 export default function AdminOrdersPage() {

@@ -78,14 +78,16 @@ export default function NewProductPage() {
                   </Select>
                 </div>
               </div>
-               <div className="grid gap-3">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid gap-3">
+                    <Label htmlFor="stock">Stock Quantity</Label>
+                    <Input id="stock" type="number" placeholder="e.g. 25" defaultValue="10" />
+                </div>
+                <div className="grid gap-3">
                     <Label htmlFor="picture">Product Images</Label>
                     <Input id="picture" type="file" multiple />
                 </div>
-                <div className="flex items-center gap-4">
-                    <Label htmlFor="stock-status">In Stock</Label>
-                    <Switch id="stock-status" defaultChecked />
-                </div>
+              </div>
             </form>
           </CardContent>
         </Card>

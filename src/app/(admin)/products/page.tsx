@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -66,7 +67,7 @@ export default function AdminProductsPage() {
                     <CardHeader>
                         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                             <div>
-                                <CardTitle>Product Catalog</CardTitle>
+                                <CardTitle>All Products</CardTitle>
                                 <CardDescription>Manage your products and view their sales performance.</CardDescription>
                             </div>
                             <div className="w-full sm:w-auto">

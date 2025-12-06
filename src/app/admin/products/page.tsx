@@ -23,7 +23,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import {
   Select,
@@ -34,10 +33,11 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, ListFilter } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import { products, categories, type Product } from '@/lib/data';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 export default function AdminProductsPage() {
   const [allProducts, setAllProducts] = useState<Product[]>(products);
@@ -93,7 +93,7 @@ export default function AdminProductsPage() {
       <div className="mt-4">
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <CardTitle>Product Management</CardTitle>
                 <CardDescription>
@@ -101,24 +101,33 @@ export default function AdminProductsPage() {
                   store.
                 </CardDescription>
               </div>
-              <div className="flex items-center gap-2">
+
+              {selectedProductIds.length > 0 && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-8 gap-1">
-                      <ListFilter className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Filter
-                      </span>
+                    <Button variant="outline" size="sm" className="h-8">
+                      Bulk Actions ({selectedProductIds.length})
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-[200px]">
-                    <DropdownMenuLabel>Filter by Category</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onSelect={handleDeleteSelected}
+                    >
+                      Delete Selected
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+             <div className="mt-4 grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                 <div className="grid gap-2">
+                    <Label htmlFor="category-filter">Filter by Category</Label>
                     <Select
                       value={categoryFilter}
                       onValueChange={setCategoryFilter}
                     >
-                      <SelectTrigger className="w-full h-8 px-2 border-none focus:ring-0">
+                      <SelectTrigger id="category-filter" aria-label="Select category">
                         <SelectValue placeholder="Select Category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -130,13 +139,14 @@ export default function AdminProductsPage() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <DropdownMenuLabel className="pt-2">Filter by Stock</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                </div>
+                 <div className="grid gap-2">
+                    <Label htmlFor="stock-filter">Filter by Stock</Label>
                      <Select
                       value={stockFilter}
                       onValueChange={setStockFilter}
                     >
-                      <SelectTrigger className="w-full h-8 px-2 border-none focus:ring-0">
+                      <SelectTrigger id="stock-filter" aria-label="Select stock status">
                         <SelectValue placeholder="Select Stock Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -145,27 +155,7 @@ export default function AdminProductsPage() {
                         <SelectItem value="out-of-stock">Out of Stock</SelectItem>
                       </SelectContent>
                     </Select>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {selectedProductIds.length > 0 && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="h-8">
-                        Bulk Actions
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-red-600"
-                        onSelect={handleDeleteSelected}
-                      >
-                        Delete Selected ({selectedProductIds.length})
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </div>
+                </div>
             </div>
           </CardHeader>
           <CardContent>

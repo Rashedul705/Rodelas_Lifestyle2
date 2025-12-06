@@ -24,7 +24,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 import Link from "next/link";
 import { products, categories } from "@/lib/data";
@@ -60,7 +59,7 @@ export default function AdminProductsPage() {
                                     <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
                                     <TableHead>Name</TableHead>
                                     <TableHead>Category</TableHead>
-                                    <TableHead>In Stock</TableHead>
+                                    <TableHead>Stock</TableHead>
                                     <TableHead className="text-right">Price</TableHead>
                                     <TableHead>
                                         <span className="sr-only">Actions</span>
@@ -78,7 +77,11 @@ export default function AdminProductsPage() {
                                             <Badge variant="outline">{getCategoryName(product.category)}</Badge>
                                         </TableCell>
                                         <TableCell>
-                                            <Switch checked={product.stock > 0} aria-label="In Stock" />
+                                            {product.stock > 0 ? (
+                                                <Badge variant="secondary">{product.stock} in stock</Badge>
+                                            ) : (
+                                                <Badge variant="destructive">Out of stock</Badge>
+                                            )}
                                         </TableCell>
                                         <TableCell className="text-right">BDT {product.price.toLocaleString()}</TableCell>
                                         <TableCell>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -11,13 +12,14 @@ import {
   SidebarTrigger,
   SidebarContent,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, ShoppingCart, Package, FileText, Home, Tags } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, FileText, Home, Tags, Truck } from "lucide-react";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: <LayoutDashboard /> },
   { href: "/admin/products", label: "Products", icon: <Package /> },
   { href: "/admin/orders", label: "Orders", icon: <ShoppingCart /> },
   { href: "/admin/categories", label: "Categories", icon: <Tags /> },
+  { href: "/admin/shipping", label: "Shipping", icon: <Truck /> },
   { href: "/admin/content", label: "Content", icon: <FileText /> },
 ];
 

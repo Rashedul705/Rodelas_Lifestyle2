@@ -18,7 +18,7 @@ export default function AdminLayout({
       <div className="grid min-h-screen w-full md:grid-cols-[256px_1fr]">
         <AdminSidebar />
         <SidebarOverlay />
-        <div className="flex flex-col md:pl-64">
+        <div className="flex flex-col md:pl-[256px]">
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-20">
             <SidebarTrigger asChild>
               <Button
@@ -39,7 +39,7 @@ export default function AdminLayout({
               </Button>
             </Link>
           </header>
-          <main className="flex-1 p-6 bg-muted/40">
+          <main className="flex-1 bg-muted/40">
             {children}
           </main>
         </div>

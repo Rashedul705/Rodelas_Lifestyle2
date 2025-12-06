@@ -24,8 +24,8 @@ export function useSidebar() {
 }
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -33,14 +33,13 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
   const value = {
     isOpen: isDesktop || isOpen,
-    setIsOpen,
-    toggle,
+    setIsOpen: isDesktop ? () => {} : setIsOpen,
+    toggle: isDesktop ? () => {} : toggle,
     isDesktop,
   };
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 }
-
 
 const SidebarTrigger = React.forwardRef<
     HTMLButtonElement,
@@ -64,11 +63,16 @@ const SidebarClose = React.forwardRef<
     const { setIsOpen, isDesktop } = useSidebar();
     const Comp = asChild ? Slot : 'button';
 
-    if (isDesktop) {
-        return null;
-    }
-
-    return <Comp ref={ref} onClick={() => setIsOpen(false)} {...props} />;
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (!isDesktop) {
+        setIsOpen(false);
+      }
+      if (props.onClick) {
+        props.onClick(event);
+      }
+    };
+    
+    return <Comp ref={ref} onClick={handleClick} {...props} />;
 });
 SidebarClose.displayName = 'SidebarClose';
 
@@ -76,17 +80,14 @@ const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { isOpen, isDesktop } = useSidebar();
+  const { isOpen } = useSidebar();
   
   return (
-    <div
+    <aside
       ref={ref}
       className={cn(
-        'fixed inset-y-0 left-0 z-40 w-64 bg-background border-r transition-transform duration-300 ease-in-out md:translate-x-0',
-        {
-          'translate-x-0': isOpen,
-          '-translate-x-full': !isOpen && !isDesktop,
-        },
+        'fixed inset-y-0 left-0 z-40 h-screen w-64 -translate-x-full border-r bg-background transition-transform duration-300 ease-in-out md:translate-x-0',
+        isOpen && 'translate-x-0',
         className
       )}
       {...props}
@@ -118,6 +119,7 @@ const SidebarOverlay = React.forwardRef<
     );
 });
 SidebarOverlay.displayName = 'SidebarOverlay';
+
 
 export {
   Sidebar,

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +46,7 @@ export function ContactForm() {
   }
 
   return (
-    <section id="contact" className="bg-background py-16 md:py-24 scroll-mt-20">
+    <section id="contact" className="bg-background pt-8 pb-16 md:pt-12 md:pb-24 scroll-mt-20">
       <div className="container max-w-2xl">
         <Card>
             <CardHeader className="text-center">

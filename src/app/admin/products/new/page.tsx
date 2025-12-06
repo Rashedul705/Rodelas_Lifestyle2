@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,6 @@ export default function NewProductPage() {
           </Button>
           <h1 className="text-xl font-semibold tracking-tight">Add New Product</h1>
         </div>
-        <Button>Save Product</Button>
       </header>
       <main className="flex-1 p-6">
         <Card className="max-w-4xl mx-auto">
@@ -104,6 +104,9 @@ export default function NewProductPage() {
               </div>
             </form>
           </CardContent>
+          <CardFooter className="justify-end">
+             <Button>Save Product</Button>
+          </CardFooter>
         </Card>
       </main>
     </div>

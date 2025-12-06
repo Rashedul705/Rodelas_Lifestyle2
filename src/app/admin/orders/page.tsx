@@ -1,9 +1,14 @@
+
+'use client';
+
+import { useState } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription
+  CardDescription,
+  CardFooter,
 } from "@/components/ui/card";
 import {
   Table,
@@ -13,16 +18,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, FileDown } from "lucide-react";
+import { MoreHorizontal, FileDown, Printer } from "lucide-react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog";
 import {
     Select,
     SelectContent,
@@ -30,16 +36,27 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { recentOrders as allOrders } from "@/lib/data";
+import Link from "next/link";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-const orders = [
-    { id: 'ORD001', customer: 'Sadia Islam', phone: '01712345678', address: 'Rajshahi', products: 'Classic Cotton Three-Piece', amount: '2,800', status: 'Delivered' },
-    { id: 'ORD002', customer: 'Karim Ahmed', phone: '01823456789', address: 'Dhaka', products: 'Premium Silk Hijab', amount: '1,200', status: 'Shipped' },
-    { id: 'ORD003', customer: 'Nusrat Jahan', phone: '01934567890', address: 'Chittagong', products: 'Modern Silk Three-Piece', amount: '4,500', status: 'Processing' },
-    { id: 'ORD004', customer: 'Rahim Sheikh', phone: '01645678901', address: 'Sylhet', products: 'Floral Print Bedsheet', amount: '3,500', status: 'Pending' },
-    { id: 'ORD005', customer: 'Farhana Begum', phone: '01556789012', address: 'Rajshahi', products: 'Soft Cotton Hijab', amount: '800', status: 'Cancelled' },
-];
 
 export default function AdminOrdersPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 10;
+
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = allOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const totalPages = Math.ceil(allOrders.length / ordersPerPage);
+
     return (
         <div className="flex flex-col">
             <header className="flex h-16 items-center justify-between border-b bg-background px-6 shrink-0">
@@ -62,14 +79,12 @@ export default function AdminOrdersPage() {
                                     <TableHead>Order ID</TableHead>
                                     <TableHead>Customer</TableHead>
                                     <TableHead>Phone</TableHead>
-                                    <TableHead>Products</TableHead>
                                     <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">Amount</TableHead>
-                                    <TableHead><span className="sr-only">Actions</span></TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {orders.map(order => (
+                                {currentOrders.map(order => (
                                      <TableRow key={order.id}>
                                         <TableCell className="font-medium">{order.id}</TableCell>
                                         <TableCell>
@@ -77,7 +92,6 @@ export default function AdminOrdersPage() {
                                             <div className="text-sm text-muted-foreground">{order.address}</div>
                                         </TableCell>
                                         <TableCell>{order.phone}</TableCell>
-                                        <TableCell>{order.products}</TableCell>
                                         <TableCell>
                                             <Select defaultValue={order.status}>
                                                 <SelectTrigger className="w-[120px]">
@@ -92,27 +106,93 @@ export default function AdminOrdersPage() {
                                                 </SelectContent>
                                             </Select>
                                         </TableCell>
-                                        <TableCell className="text-right">BDT {order.amount}</TableCell>
-                                        <TableCell>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                <Button aria-haspopup="true" size="icon" variant="ghost">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                    <span className="sr-only">Toggle menu</span>
-                                                </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                                <DropdownMenuItem>Print Invoice</DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                        <TableCell className="text-right">
+                                             <Dialog>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                        <span className="sr-only">Toggle menu</span>
+                                                    </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DialogTrigger asChild>
+                                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>View Details</DropdownMenuItem>
+                                                        </DialogTrigger>
+                                                        <DropdownMenuItem asChild>
+                                                            <Link href={`/admin/invoice/${order.id}`}>Print Invoice</Link>
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                                <DialogContent className="sm:max-w-[425px]">
+                                                    <DialogHeader>
+                                                        <DialogTitle>Order {order.id}</DialogTitle>
+                                                        <DialogDescription>
+                                                            Products ordered by {order.customer}.
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                    <div className="grid gap-4 py-4">
+                                                        {order.products.map((product, index) => (
+                                                            <div key={index} className="flex justify-between items-center">
+                                                                <div>
+                                                                    <p className="font-medium">{product.name}</p>
+                                                                    <p className="text-sm text-muted-foreground">Quantity: {product.quantity}</p>
+                                                                </div>
+                                                                <p className="text-sm font-medium">BDT {(product.price * product.quantity).toLocaleString()}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                     <div className="flex justify-between items-center font-bold border-t pt-4">
+                                                        <p>Total</p>
+                                                        <p>BDT {order.amount}</p>
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Button asChild>
+                                                            <Link href={`/admin/invoice/${order.id}`}>
+                                                                <Printer className="mr-2 h-4 w-4" />
+                                                                Print Invoice
+                                                            </Link>
+                                                        </Button>
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
                                         </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </CardContent>
+                    <CardFooter>
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                <PaginationPrevious
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage((prev) => Math.max(prev - 1, 1));
+                                    }}
+                                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                                />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <span className="p-2 text-sm">
+                                        Page {currentPage} of {totalPages}
+                                    </span>
+                                </PaginationItem>
+                                <PaginationItem>
+                                <PaginationNext
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                                    }}
+                                    className={currentPage === totalPages ? 'pointer-events-none opacity_50' : ''}
+                                />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </CardFooter>
                 </Card>
             </main>
         </div>

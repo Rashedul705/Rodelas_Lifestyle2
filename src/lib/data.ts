@@ -167,8 +167,14 @@ const generateOrder = (index: number): Order => {
   const addresses = ['Rajshahi', 'Dhaka', 'Chittagong', 'Sylhet', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh', 'Comilla', 'Gazipur'];
   const statuses: Order['status'][] = ['Delivered', 'Shipped', 'Processing', 'Pending', 'Cancelled'];
   
-  const product1 = products[Math.floor(seededRandom() * products.length)];
-  const product2 = products[Math.floor(seededRandom() * products.length)];
+  const product1Index = Math.floor(seededRandom() * products.length);
+  let product2Index = Math.floor(seededRandom() * products.length);
+  while (product1Index === product2Index) {
+    product2Index = Math.floor(seededRandom() * products.length);
+  }
+  const product1 = products[product1Index];
+  const product2 = products[product2Index];
+
 
   const orderProducts = [{ name: product1.name, quantity: 1, price: product1.price }];
   let amount = product1.price;
@@ -181,7 +187,7 @@ const generateOrder = (index: number): Order => {
   // Deterministic date generation
   const startDate = new Date(2024, 0, 1).getTime();
   const endDate = new Date().getTime();
-  const randomDate = new Date(startDate + (index / 49) * (endDate - startDate));
+  const randomDate = new Date(startDate + seededRandom() * (endDate - startDate));
 
   return {
     id: `ORD${String(index + 1).padStart(3, '0')}`,

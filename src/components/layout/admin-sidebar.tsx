@@ -4,15 +4,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ReactNode } from "react";
-import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot, Shapes } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { useSidebar, SidebarTrigger, SidebarClose, SidebarOverlay } from "@/components/ui/sidebar";
+import { useSidebar, SidebarTrigger, SidebarClose } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: <LayoutDashboard /> },
   { href: "/admin/products", label: "Products", icon: <Package /> },
   { href: "/admin/orders", label: "Orders", icon: <ShoppingCart /> },
+  { href: "/admin/categories", label: "Categories", icon: <Shapes /> },
   { href: "/admin/customers", label: "Customers", icon: <Users /> },
   { href: "/admin/content", label: "Content", icon: <Pencil /> },
 ];
@@ -90,6 +91,11 @@ function AdminMobileSidebar() {
 }
 
 export function AdminMobileHeader() {
+  const pathname = usePathname();
+  const currentNavItem = adminNavItems.find(item => item.href === pathname || (item.href !== '/admin' && pathname.startsWith(item.href)));
+  const title = currentNavItem ? currentNavItem.label : "Admin Panel";
+
+
     return (
         <header className="flex h-16 items-center gap-4 border-b bg-background px-4 lg:hidden">
             <SidebarTrigger asChild>
@@ -99,7 +105,7 @@ export function AdminMobileHeader() {
                 </Button>
             </SidebarTrigger>
             <h1 className="flex-1 text-lg font-semibold">
-                <Link href="/admin">Admin Panel</Link>
+                {title}
             </h1>
         </header>
     );

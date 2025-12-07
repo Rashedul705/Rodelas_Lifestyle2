@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { Search, ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useCart } from "@/components/cart/cart-context";
 import { CartSheet } from "@/components/cart/cart-sheet";
 import { SearchDialog } from "@/components/search-dialog";
@@ -81,20 +81,25 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="left">
                 <div className="flex flex-col gap-4 p-4">
-                  <Link href="/" className="text-lg font-bold">
-                    Rodelas lifestyle
-                  </Link>
+                  <SheetClose asChild>
+                    <Link href="/" className="text-lg font-bold">
+                      Rodelas lifestyle
+                    </Link>
+                  </SheetClose>
                   <nav className="flex flex-col gap-3">
                     {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="text-muted-foreground hover:text-foreground"
-                      >
-                        {link.label}
-                      </Link>
+                       <SheetClose asChild key={link.href}>
+                         <Link
+                          href={link.href}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          {link.label}
+                        </Link>
+                       </SheetClose>
                     ))}
-                    <Link href="/admin" className="text-muted-foreground hover:text-foreground">Admin</Link>
+                    <SheetClose asChild>
+                      <Link href="/admin" className="text-muted-foreground hover:text-foreground">Admin</Link>
+                    </SheetClose>
                   </nav>
                    <div className="mt-auto flex flex-col gap-4">
                      <CartSheet>
@@ -115,10 +120,12 @@ export function Header() {
                         </Link>
                     </Button>
                     <SearchDialog>
+                      <SheetClose asChild>
                         <Button variant="outline" className="justify-start">
                             <Search className="h-5 w-5 mr-2" />
                             Search
                         </Button>
+                      </SheetClose>
                     </SearchDialog>
                   </div>
                 </div>

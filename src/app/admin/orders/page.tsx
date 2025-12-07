@@ -31,6 +31,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -49,6 +59,7 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
   
   useEffect(() => {
     setOrders(recentOrders);
@@ -65,6 +76,11 @@ export default function AdminOrdersPage() {
             o.id === orderId ? { ...o, status: newStatus } : o
         )
     );
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    setOrders(currentOrders => currentOrders.filter(o => o.id !== orderId));
+    setOrderToDelete(null);
   };
   
   const handlePrintInvoice = (order: Order) => {
@@ -254,7 +270,10 @@ export default function AdminOrdersPage() {
                           <DropdownMenuItem onSelect={() => setSelectedOrder(order)}>
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onSelect={() => setOrderToDelete(order.id)}
+                          >
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -322,6 +341,25 @@ export default function AdminOrdersPage() {
               )}
           </DialogContent>
       </Dialog>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!orderToDelete} onOpenChange={setOrderToDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the order
+              and remove its data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => handleDeleteOrder(orderToDelete!)}>
+              Yes, delete order
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

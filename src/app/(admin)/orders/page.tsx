@@ -50,15 +50,17 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Printer } from 'lucide-react';
+import { MoreHorizontal, Printer, Search } from 'lucide-react';
 import { recentOrders, type Order } from '@/lib/data';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { Input } from '@/components/ui/input';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
   
@@ -68,9 +70,15 @@ export default function AdminOrdersPage() {
   }, []);
 
   const filteredOrders = useMemo(() => {
-    if (statusFilter === 'all') return orders;
-    return orders.filter(order => order.status === statusFilter);
-  }, [orders, statusFilter]);
+    const lowercasedQuery = searchQuery.toLowerCase();
+    return orders.filter(order => {
+        const statusMatch = statusFilter === 'all' || order.status === statusFilter;
+        const searchMatch = !lowercasedQuery ||
+            order.id.toLowerCase().includes(lowercasedQuery) ||
+            order.phone.includes(lowercasedQuery);
+        return statusMatch && searchMatch;
+    });
+  }, [orders, statusFilter, searchQuery]);
 
   const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
     setOrders(currentOrders => 
@@ -195,6 +203,19 @@ export default function AdminOrdersPage() {
             View and manage all customer orders.
           </CardDescription>
           <div className="mt-4 grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+               <div className="grid gap-2 md:col-span-2">
+                 <Label htmlFor="search">Search Orders</Label>
+                  <div className="relative">
+                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                     <Input
+                        id="search"
+                        placeholder="Search by Order ID or Phone Number..."
+                        className="pl-10"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                     />
+                  </div>
+               </div>
                <div className="grid gap-2">
                   <Label htmlFor="status-filter">Filter by Status</Label>
                   <Select

@@ -202,7 +202,7 @@ const generateOrder = (index: number): Order => {
   
   // Deterministic date generation
   const startDate = new Date(2024, 0, 1).getTime();
-  const endDate = new Date().getTime();
+  const endDate = new Date(2024, 6, 25).getTime(); // Use a fixed end date
   const randomDate = new Date(startDate + seededRandom() * (endDate - startDate));
 
   return {

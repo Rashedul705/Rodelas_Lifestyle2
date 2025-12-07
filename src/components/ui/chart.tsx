@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -264,10 +265,11 @@ const ChartLegendContent = React.forwardRef<
     Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
       hideIcon?: boolean
       nameKey?: string
+      onClick?: (item: any) => void;
     }
 >(
   (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
+    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey, onClick },
     ref
   ) => {
     const { config } = useChart()
@@ -293,8 +295,10 @@ const ChartLegendContent = React.forwardRef<
             <div
               key={item.value}
               className={cn(
-                "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
+                "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground",
+                onClick ? "cursor-pointer" : ""
               )}
+              onClick={() => onClick?.(item)}
             >
               {itemConfig?.icon && !hideIcon ? (
                 <itemConfig.icon />

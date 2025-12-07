@@ -54,13 +54,16 @@ const trafficSourcesData = [
   { source: 'Others', visitors: 900, fill: 'hsl(var(--chart-5))' },
 ];
 
-const topPagesData = [
-  { page: '/', name: 'Homepage', views: 12500, unique: 8900, avgTime: '2m 15s' },
-  { page: '/product/elegant-floral-three-piece', name: 'Elegant Floral Three-Piece', views: 9800, unique: 7200, avgTime: '3m 45s' },
-  { page: '/checkout', name: 'Checkout', views: 4500, unique: 3100, avgTime: '1m 30s' },
-  { page: '/category/hijab', name: 'Hijab Category', views: 7600, unique: 5400, avgTime: '2m 05s' },
-  { page: '/product/classic-cotton-three-piece', name: 'Classic Cotton Three-Piece', views: 6500, unique: 4800, avgTime: '3m 10s' },
+const allTopPagesData = [
+  { page: '/', name: 'Homepage', views: 12500, unique: 8900, avgTime: '2m 15s', source: 'Facebook' },
+  { page: '/product/elegant-floral-three-piece', name: 'Elegant Floral Three-Piece', views: 9800, unique: 7200, avgTime: '3m 45s', source: 'Google' },
+  { page: '/checkout', name: 'Checkout', views: 4500, unique: 3100, avgTime: '1m 30s', source: 'Direct' },
+  { page: '/category/hijab', name: 'Hijab Category', views: 7600, unique: 5400, avgTime: '2m 05s', source: 'Instagram' },
+  { page: '/product/classic-cotton-three-piece', name: 'Classic Cotton Three-Piece', views: 6500, unique: 4800, avgTime: '3m 10s', source: 'Facebook' },
+  { page: '/', name: 'Homepage', views: 8000, unique: 6000, avgTime: '2m 00s', source: 'Google' },
+  { page: '/category/bedsheet', name: 'Bedsheet Category', views: 4200, unique: 3000, avgTime: '1m 50s', source: 'Others' },
 ];
+
 
 const topLocationsData = [
     { location: 'Dhaka', visitors: '45%', flag: '🇧🇩' },
@@ -107,7 +110,26 @@ const sourcesChartConfig = {
 
 export default function AdminAnalyticsPage() {
   const [liveUsers, setLiveUsers] = useState(0);
+  const [selectedSource, setSelectedSource] = useState<string | null>(null);
   const trafficData = useMemo(() => generateLast30DaysData(), []);
+
+  const topPagesData = useMemo(() => {
+    if (!selectedSource) {
+        // A simple aggregation for the "All" view
+        const pageMap = new Map();
+        allTopPagesData.forEach(p => {
+            if (pageMap.has(p.page)) {
+                const existing = pageMap.get(p.page);
+                existing.views += p.views;
+                existing.unique += p.unique;
+            } else {
+                pageMap.set(p.page, { ...p });
+            }
+        });
+        return Array.from(pageMap.values()).sort((a,b) => b.views - a.views).slice(0, 5);
+    }
+    return allTopPagesData.filter(p => p.source === selectedSource);
+  }, [selectedSource]);
 
   useState(() => {
     const updateLiveUsers = () => {
@@ -222,9 +244,12 @@ export default function AdminAnalyticsPage() {
         </Card>
         
          <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Traffic Sources</CardTitle>
-            <CardDescription>Where your visitors are coming from.</CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Traffic Sources</CardTitle>
+              <CardDescription>Where your visitors are coming from.</CardDescription>
+            </div>
+            {selectedSource && <Button variant="ghost" size="sm" onClick={() => setSelectedSource(null)}>Show All</Button>}
           </CardHeader>
           <CardContent className="flex-1 pb-0">
              <ChartContainer
@@ -245,7 +270,13 @@ export default function AdminAnalyticsPage() {
                 >
                 </Pie>
                 <ChartLegend
-                    content={<ChartLegendContent nameKey="source" />}
+                    content={
+                        <ChartLegendContent 
+                            nameKey="source" 
+                            className="[&>*]:cursor-pointer"
+                            onClick={(item) => setSelectedSource(item.payload?.source as string)}
+                        />
+                    }
                     className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
                 />
               </PieChart>
@@ -258,7 +289,12 @@ export default function AdminAnalyticsPage() {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Most Visited Pages</CardTitle>
-            <CardDescription>Your most popular pages by views.</CardDescription>
+            <CardDescription>
+                {selectedSource 
+                    ? `Your most popular pages from ${selectedSource}.` 
+                    : 'Your most popular pages by views.'
+                }
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -272,7 +308,7 @@ export default function AdminAnalyticsPage() {
               </TableHeader>
               <TableBody>
                 {topPagesData.map((page) => (
-                  <TableRow key={page.page}>
+                  <TableRow key={page.page + (page.source || '')}>
                     <TableCell>
                       <Link href={page.page} className="font-medium hover:underline flex items-center gap-2" target="_blank">
                         {page.name} <ExternalLink className="h-3 w-3 text-muted-foreground" />

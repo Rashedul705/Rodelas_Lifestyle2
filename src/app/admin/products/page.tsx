@@ -38,6 +38,7 @@ import Image from 'next/image';
 import { products, categories, type Product } from '@/lib/data';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export default function AdminProductsPage() {
   const [allProducts, setAllProducts] = useState<Product[]>(products);
@@ -89,7 +90,9 @@ export default function AdminProductsPage() {
     <>
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold tracking-tight">Products</h1>
-        <Button>Add Product</Button>
+        <Button asChild>
+          <Link href="/admin/products/new">Add Product</Link>
+        </Button>
       </div>
       <div className="mt-4">
         <Card>

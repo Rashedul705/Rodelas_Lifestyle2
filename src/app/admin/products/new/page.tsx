@@ -30,20 +30,23 @@ import { useState } from 'react';
 export default function AdminNewProductPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [galleryImages, setGalleryImages] = useState(['']);
+  const [galleryImages, setGalleryImages] = useState<File[]>([]);
 
   const handleAddGalleryImage = () => {
-    setGalleryImages([...galleryImages, '']);
+    // In a real app, you'd open a file picker
+    // For now, we'll just prep for a new file
   };
 
   const handleRemoveGalleryImage = (index: number) => {
     setGalleryImages(galleryImages.filter((_, i) => i !== index));
   };
 
-  const handleGalleryImageChange = (index: number, value: string) => {
-    const newImages = [...galleryImages];
-    newImages[index] = value;
-    setGalleryImages(newImages);
+  const handleGalleryImageChange = (index: number, file: File | null) => {
+    if (file) {
+      const newImages = [...galleryImages];
+      newImages[index] = file;
+      setGalleryImages(newImages);
+    }
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -123,28 +126,30 @@ export default function AdminNewProductPage() {
                    <CardDescription>Add additional images for the product.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {galleryImages.map((image, index) => (
-                     <div key={index} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                         <Input 
-                            type="text" 
-                            placeholder="https://..."
-                            value={image}
-                            onChange={(e) => handleGalleryImageChange(index, e.target.value)}
+                            type="file"
+                            multiple
+                            onChange={(e) => e.target.files && setGalleryImages(Array.from(e.target.files))}
                         />
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => handleRemoveGalleryImage(index)}
-                            disabled={galleryImages.length === 1}
-                        >
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
                     </div>
-                  ))}
-                   <Button type="button" variant="outline" size="sm" onClick={handleAddGalleryImage}>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Image
-                  </Button>
+                    {galleryImages.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2">
+                            {galleryImages.map((file, index) => (
+                                <div key={index} className="relative aspect-square">
+                                    <img src={URL.createObjectURL(file)} alt={`preview ${index}`} className="w-full h-full object-cover rounded-md" />
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="absolute top-1 right-1 h-6 w-6 bg-black/50 hover:bg-black/70 text-white"
+                                        onClick={() => handleRemoveGalleryImage(index)}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </CardContent>
               </Card>
             </div>
@@ -183,8 +188,8 @@ export default function AdminNewProductPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-2">
-                     <Label htmlFor="imageUrl">Image URL</Label>
-                     <Input id="imageUrl" type="text" placeholder="https://..." defaultValue="https://picsum.photos/seed/new-product/400/600" />
+                     <Label htmlFor="product-image">Main Image</Label>
+                     <Input id="product-image" type="file" />
                   </div>
                 </CardContent>
               </Card>

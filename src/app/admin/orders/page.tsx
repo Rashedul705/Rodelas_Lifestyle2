@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -44,6 +43,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { recentOrders, type Order } from '@/lib/data';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -193,12 +193,17 @@ export default function AdminOrdersPage() {
                           <div className="space-y-2">
                               <h4 className="font-semibold">Ordered Items</h4>
                                <ul className="space-y-2 text-sm">
-                                  {selectedOrder.products.map((product, index) => (
-                                      <li key={index} className="flex justify-between items-center">
-                                          <span>{product.name} (x{product.quantity})</span>
-                                          <span className="font-medium">BDT {(product.price * product.quantity).toLocaleString()}</span>
-                                      </li>
-                                  ))}
+                                  {selectedOrder.products.map((product, index) => {
+                                      const productSlug = product.name.toLowerCase().replace(/\s+/g, '-');
+                                      return (
+                                        <li key={index} className="flex justify-between items-center">
+                                            <Link href={`/product/${productSlug}`} className="hover:underline" target="_blank" rel="noopener noreferrer">
+                                                <span>{product.name} (x{product.quantity})</span>
+                                            </Link>
+                                            <span className="font-medium">BDT {(product.price * product.quantity).toLocaleString()}</span>
+                                        </li>
+                                      )
+                                  })}
                               </ul>
                           </div>
                           <Separator />

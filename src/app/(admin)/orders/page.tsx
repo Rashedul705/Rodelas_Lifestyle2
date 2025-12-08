@@ -258,7 +258,7 @@ export default function AdminOrdersPage() {
                     <TableRow key={order.id}>
                       <TableCell className="font-medium">{order.id}</TableCell>
                       <TableCell className="hidden sm:table-cell">{order.customer}</TableCell>
-                      <TableCell className="hidden md:table-cell">{order.date}</TableCell>
+                      <TableCell className="hidden md:table-cell">{new Date(order.date).toLocaleDateString()}</TableCell>
                       <TableCell>
                         <Select value={order.status} onValueChange={(newStatus: Order['status']) => handleStatusChange(order.id, newStatus)}>
                           <SelectTrigger className="w-32">

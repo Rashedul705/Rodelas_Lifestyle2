@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ReactNode } from "react";
-import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot, Shapes, AreaChart, MessageSquareQuestion } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot, Shapes, AreaChart, MessageSquareQuote } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useSidebar, SidebarTrigger, SidebarClose } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ const adminNavItems = [
   { href: "/admin/orders", label: "Orders", icon: <ShoppingCart /> },
   { href: "/admin/categories", label: "Categories", icon: <Shapes /> },
   { href: "/admin/customers", label: "Customers", icon: <Users /> },
-  { href: "/admin/inquiries", label: "Inquiries", icon: <MessageSquareQuestion /> },
+  { href: "/admin/inquiries", label: "Inquiries", icon: <MessageSquareQuote /> },
   { href: "/admin/content", label: "Content", icon: <Pencil /> },
 ];
 
@@ -46,12 +46,6 @@ function AdminNavLinks() {
 function SidebarContent() {
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex h-16 items-center border-b px-6">
-          <Link href="/admin" className="flex items-center gap-2 font-semibold">
-            <Bot className="h-6 w-6 text-primary" />
-            <span className="">Admin Panel</span>
-          </Link>
-      </div>
       <div className="flex-1 overflow-y-auto py-2">
         <AdminNavLinks />
       </div>
@@ -74,7 +68,15 @@ export function AdminSidebar() {
   return (
     <>
       <aside className="hidden lg:block lg:w-64 lg:flex-shrink-0 lg:border-r">
+        <div className="flex h-full flex-col gap-2">
+          <div className="flex h-16 items-center border-b px-6">
+              <Link href="/admin" className="flex items-center gap-2 font-semibold">
+                <Bot className="h-6 w-6 text-primary" />
+                <span className="">Admin Panel</span>
+              </Link>
+          </div>
           <SidebarContent />
+        </div>
       </aside>
       <AdminMobileSidebar />
     </>
@@ -86,27 +88,14 @@ function AdminMobileSidebar() {
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent side="left" className="p-0 w-64 flex flex-col">
-                <SheetHeader className="h-16 items-center border-b px-6 flex flex-row justify-between">
+              <SheetHeader className="h-16 flex flex-row items-center justify-between border-b px-6">
                   <Link href="/admin" className="flex items-center gap-2 font-semibold">
                     <Bot className="h-6 w-6 text-primary" />
-                    <span className="">Admin Panel</span>
+                    <span>Admin Panel</span>
                   </Link>
                 <SheetTitle className="sr-only">Admin Menu</SheetTitle>
               </SheetHeader>
-               <div className="flex-1 overflow-y-auto py-2">
-                <AdminNavLinks />
-              </div>
-              <div className="mt-auto border-t p-4">
-                <SidebarClose asChild>
-                  <Link
-                    href="/"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <Home className="h-4 w-4" />
-                    Storefront
-                  </Link>
-                </SidebarClose>
-              </div>
+               <SidebarContent />
             </SheetContent>
         </Sheet>
     );

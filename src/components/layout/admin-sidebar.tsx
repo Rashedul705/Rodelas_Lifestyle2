@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ReactNode } from "react";
 import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot, Shapes, AreaChart } from "lucide-react";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useSidebar, SidebarTrigger, SidebarClose } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
@@ -45,12 +45,13 @@ function AdminNavLinks() {
 function SidebarContent() {
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex h-16 items-center border-b px-6">
-        <Link href="/admin" className="flex items-center gap-2 font-semibold">
-          <Bot className="h-6 w-6 text-primary" />
-          <span className="">Admin Panel</span>
-        </Link>
-      </div>
+      <SheetHeader className="h-16 items-center border-b px-6 flex flex-row justify-between">
+          <Link href="/admin" className="flex items-center gap-2 font-semibold">
+            <Bot className="h-6 w-6 text-primary" />
+            <span className="">Admin Panel</span>
+          </Link>
+        <SheetTitle className="sr-only">Admin Menu</SheetTitle>
+      </SheetHeader>
       <div className="flex-1 overflow-y-auto py-2">
         <AdminNavLinks />
       </div>
@@ -84,7 +85,7 @@ function AdminMobileSidebar() {
     const { isOpen, setIsOpen } = useSidebar();
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetContent side="left" className="p-0 w-64">
+            <SheetContent side="left" className="p-0 w-64 flex flex-col">
                 <SidebarContent />
             </SheetContent>
         </Sheet>

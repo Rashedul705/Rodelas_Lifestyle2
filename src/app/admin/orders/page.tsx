@@ -50,15 +50,17 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Printer } from 'lucide-react';
+import { MoreHorizontal, Printer, Search } from 'lucide-react';
 import { recentOrders, type Order } from '@/lib/data';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { Input } from '@/components/ui/input';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
   
@@ -68,9 +70,15 @@ export default function AdminOrdersPage() {
   }, []);
 
   const filteredOrders = useMemo(() => {
-    if (statusFilter === 'all') return orders;
-    return orders.filter(order => order.status === statusFilter);
-  }, [orders, statusFilter]);
+    const lowercasedQuery = searchQuery.toLowerCase();
+    return orders.filter(order => {
+        const statusMatch = statusFilter === 'all' || order.status === statusFilter;
+        const searchMatch = !lowercasedQuery ||
+            order.id.toLowerCase().includes(lowercasedQuery) ||
+            order.phone.replace(/[\s-]/g, '').includes(lowercasedQuery.replace(/[\s-]/g, ''));
+        return statusMatch && searchMatch;
+    });
+  }, [orders, statusFilter, searchQuery]);
 
   const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
     setOrders(currentOrders => 
@@ -195,6 +203,19 @@ export default function AdminOrdersPage() {
             View and manage all customer orders.
           </CardDescription>
           <div className="mt-4 grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+               <div className="grid gap-2 md:col-span-2">
+                 <Label htmlFor="search">Search Orders</Label>
+                  <div className="relative">
+                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                     <Input
+                        id="search"
+                        placeholder="Search by Order ID or Phone Number..."
+                        className="pl-10"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                     />
+                  </div>
+               </div>
                <div className="grid gap-2">
                   <Label htmlFor="status-filter">Filter by Status</Label>
                   <Select
@@ -232,56 +253,64 @@ export default function AdminOrdersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">{order.id}</TableCell>
-                    <TableCell className="hidden sm:table-cell">{order.customer}</TableCell>
-                    <TableCell className="hidden md:table-cell">{order.date}</TableCell>
-                    <TableCell>
-                      <Select value={order.status} onValueChange={(newStatus: Order['status']) => handleStatusChange(order.id, newStatus)}>
-                        <SelectTrigger className="w-32">
-                           <SelectValue placeholder="Update status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                           <SelectItem value="Pending">Pending</SelectItem>
-                           <SelectItem value="Processing">Processing</SelectItem>
-                           <SelectItem value="Shipped">Shipped</SelectItem>
-                           <SelectItem value="Delivered">Delivered</SelectItem>
-                           <SelectItem value="Cancelled">Cancelled</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      BDT {parseInt(order.amount).toLocaleString()}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onSelect={() => setSelectedOrder(order)}>
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-red-600"
-                            onSelect={() => setOrderToDelete(order.id)}
-                          >
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                {filteredOrders.length > 0 ? (
+                  filteredOrders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="font-medium">{order.id}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{order.customer}</TableCell>
+                      <TableCell className="hidden md:table-cell">{new Date(order.date).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <Select value={order.status} onValueChange={(newStatus: Order['status']) => handleStatusChange(order.id, newStatus)}>
+                          <SelectTrigger className="w-32">
+                             <SelectValue placeholder="Update status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                             <SelectItem value="Pending">Pending</SelectItem>
+                             <SelectItem value="Processing">Processing</SelectItem>
+                             <SelectItem value="Shipped">Shipped</SelectItem>
+                             <SelectItem value="Delivered">Delivered</SelectItem>
+                             <SelectItem value="Cancelled">Cancelled</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        BDT {parseInt(order.amount).toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              aria-haspopup="true"
+                              size="icon"
+                              variant="ghost"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onSelect={() => setSelectedOrder(order)}>
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="text-red-600"
+                              onSelect={() => setOrderToDelete(order.id)}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center">
+                      No orders found.
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </div>
@@ -296,7 +325,7 @@ export default function AdminOrdersPage() {
                       <DialogHeader>
                           <DialogTitle>Order Details: {selectedOrder.id}</DialogTitle>
                           <DialogDescription>
-                              Full details for the order placed on {selectedOrder.date}.
+                              Full details for the order placed on {new Date(selectedOrder.date).toLocaleDateString()}.
                           </DialogDescription>
                       </DialogHeader>
                       <div className="grid gap-4 py-4">

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -17,8 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { recentOrders } from '@/lib/data';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { recentOrders, type Order } from '@/lib/data';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,8 +25,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 type Customer = {
   name: string;
@@ -36,9 +44,15 @@ type Customer = {
   totalSpent: number;
 };
 
+type CustomerWithOrders = Customer & {
+    orders: Order[];
+}
+
 export default function AdminCustomersPage() {
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerWithOrders | null>(null);
+
   const customers = useMemo(() => {
-    const customerMap = new Map<string, Customer>();
+    const customerMap = new Map<string, CustomerWithOrders>();
 
     recentOrders.forEach((order) => {
       const customerKey = `${order.customer}-${order.phone}`;
@@ -47,12 +61,14 @@ export default function AdminCustomersPage() {
       if (existingCustomer) {
         existingCustomer.totalOrders += 1;
         existingCustomer.totalSpent += parseFloat(order.amount);
+        existingCustomer.orders.push(order);
       } else {
         customerMap.set(customerKey, {
           name: order.customer,
           phone: order.phone,
           totalOrders: 1,
           totalSpent: parseFloat(order.amount),
+          orders: [order],
         });
       }
     });
@@ -61,13 +77,9 @@ export default function AdminCustomersPage() {
       (a, b) => b.totalSpent - a.totalSpent
     );
   }, []);
-  
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase();
+
+  const handleViewDetails = (customer: CustomerWithOrders) => {
+    setSelectedCustomer(customer);
   }
 
   return (
@@ -100,14 +112,7 @@ export default function AdminCustomersPage() {
                 {customers.map((customer) => (
                   <TableRow key={`${customer.name}-${customer.phone}`}>
                     <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarFallback>
-                            {getInitials(customer.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="font-medium">{customer.name}</div>
-                      </div>
+                      <div className="font-medium">{customer.name}</div>
                     </TableCell>
                     <TableCell>{customer.phone}</TableCell>
                     <TableCell className="text-center">
@@ -130,7 +135,9 @@ export default function AdminCustomersPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>View Details</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleViewDetails(customer)}>
+                            View Details
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -141,6 +148,57 @@ export default function AdminCustomersPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Customer Details Dialog */}
+       <Dialog open={!!selectedCustomer} onOpenChange={() => setSelectedCustomer(null)}>
+          <DialogContent className="sm:max-w-3xl">
+              {selectedCustomer && (
+                  <>
+                      <DialogHeader>
+                          <DialogTitle>Order History for {selectedCustomer.name}</DialogTitle>
+                          <DialogDescription>
+                              Showing all orders placed by this customer.
+                          </DialogDescription>
+                      </DialogHeader>
+                      <div className="py-4 max-h-[60vh] overflow-y-auto">
+                          <Table>
+                              <TableHeader>
+                                  <TableRow>
+                                      <TableHead>Order ID</TableHead>
+                                      <TableHead>Date</TableHead>
+                                      <TableHead>Status</TableHead>
+                                      <TableHead className="text-right">Amount</TableHead>
+                                  </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                  {selectedCustomer.orders.map(order => (
+                                      <TableRow key={order.id}>
+                                          <TableCell className="font-medium">{order.id}</TableCell>
+                                          <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
+                                          <TableCell>
+                                              <Badge
+                                                  variant={
+                                                    order.status === 'Delivered' ? 'default'
+                                                    : order.status === 'Cancelled' ? 'destructive'
+                                                    : 'secondary'
+                                                  }
+                                              >
+                                                  {order.status}
+                                              </Badge>
+                                          </TableCell>
+                                          <TableCell className="text-right">BDT {parseInt(order.amount).toLocaleString()}</TableCell>
+                                      </TableRow>
+                                  ))}
+                              </TableBody>
+                          </Table>
+                      </div>
+                      <DialogFooter>
+                          <Button variant="outline" onClick={() => setSelectedCustomer(null)}>Close</Button>
+                      </DialogFooter>
+                  </>
+              )}
+          </DialogContent>
+      </Dialog>
     </div>
   );
 }

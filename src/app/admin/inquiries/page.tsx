@@ -19,6 +19,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -118,9 +125,6 @@ export default function AdminInquiriesPage() {
   const filteredInquiries = useMemo(() => {
     if (filter === 'all') {
       return inquiries;
-    }
-    if (filter === 'closed') {
-        return inquiries.filter(inquiry => inquiry.status.toLowerCase() === 'closed');
     }
     return inquiries.filter(inquiry => inquiry.status.toLowerCase() === filter);
   }, [inquiries, filter]);
@@ -292,3 +296,4 @@ export default function AdminInquiriesPage() {
     </div>
   );
 }
+

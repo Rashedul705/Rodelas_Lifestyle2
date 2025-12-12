@@ -40,14 +40,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +64,7 @@ type Category = {
 };
 
 const slugify = (text: string) => {
-    return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 }
 
 export default function AdminCategoriesPage() {
@@ -88,7 +88,7 @@ export default function AdminCategoriesPage() {
       category.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [categories, searchQuery]);
-  
+
   const handleOpenForm = (category: Category | null = null) => {
     setEditingCategory(category);
     setIsFormOpen(true);
@@ -103,27 +103,27 @@ export default function AdminCategoriesPage() {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     let slug = formData.get('slug') as string;
-    
+
     if (!name) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Category name is required.' });
-        return;
+      toast({ variant: 'destructive', title: 'Error', description: 'Category name is required.' });
+      return;
     }
 
     if (!slug) {
-        slug = slugify(name);
+      slug = slugify(name);
     }
-    
+
     if (editingCategory) {
       // Update existing category
-      setCategories(categories.map(c => 
+      setCategories(categories.map(c =>
         c.id === editingCategory.id ? { ...c, name, id: slug, description } : c
       ));
       toast({ title: 'Success', description: 'Category updated successfully.' });
     } else {
       // Add new category
       if (categories.some(c => c.id === slug)) {
-          toast({ variant: 'destructive', title: 'Error', description: 'Slug must be unique.' });
-          return;
+        toast({ variant: 'destructive', title: 'Error', description: 'Slug must be unique.' });
+        return;
       }
       setCategories([...categories, { id: slug, name, description }]);
       toast({ title: 'Success', description: 'Category added successfully.' });
@@ -154,15 +154,15 @@ export default function AdminCategoriesPage() {
           <CardDescription>
             Manage your product categories.
           </CardDescription>
-           <div className="relative mt-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                placeholder="Search by category name..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
-            </div>
+          <div className="relative mt-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Search by category name..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -208,7 +208,7 @@ export default function AdminCategoriesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onSelect={() => handleOpenForm(category)}>
+                        <DropdownMenuItem onSelect={() => setTimeout(() => handleOpenForm(category), 100)}>
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => setCategoryToDelete(category)} className="text-red-600">
@@ -223,7 +223,7 @@ export default function AdminCategoriesPage() {
           </Table>
         </CardContent>
       </Card>
-      
+
       {/* Add/Edit Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="sm:max-w-[425px]">
@@ -247,7 +247,7 @@ export default function AdminCategoriesPage() {
                 </Label>
                 <Input id="slug" name="slug" defaultValue={editingCategory?.id} className="col-span-3" disabled={!!editingCategory} />
               </div>
-               <div className="grid grid-cols-4 items-center gap-4">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="image" className="text-right">
                   Image
                 </Label>
@@ -267,7 +267,7 @@ export default function AdminCategoriesPage() {
           </form>
         </DialogContent>
       </Dialog>
-      
+
       {/* Delete Confirmation */}
       <AlertDialog open={!!categoryToDelete} onOpenChange={() => setCategoryToDelete(null)}>
         <AlertDialogContent>

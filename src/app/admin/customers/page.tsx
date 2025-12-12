@@ -35,7 +35,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { MoreHorizontal, Search } from 'lucide-react';
 
 type Customer = {
   name: string;
@@ -47,6 +48,7 @@ type Customer = {
 export default function AdminCustomersPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const customers = useMemo(() => {
     const customerMap = new Map<string, Customer>();
@@ -68,10 +70,14 @@ export default function AdminCustomersPage() {
       }
     });
 
-    return Array.from(customerMap.values()).sort(
-      (a, b) => b.totalSpent - a.totalSpent
-    );
-  }, []);
+    return Array.from(customerMap.values())
+      .filter((customer) =>
+        customer.phone.includes(searchQuery)
+      )
+      .sort(
+        (a, b) => b.totalSpent - a.totalSpent
+      );
+  }, [searchQuery]);
 
   const getCustomerOrders = (customer: Customer) => {
     return recentOrders.filter(
@@ -102,6 +108,20 @@ export default function AdminCustomersPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="flex items-center gap-2 mb-4 max-w-sm">
+            <div className="relative flex-1">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by phone number..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+            <Button variant="outline" size="icon">
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
           <div className="relative w-full overflow-auto">
             <Table>
               <TableHeader>

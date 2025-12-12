@@ -4,9 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { faqs } from "@/lib/data";
+import { faqs as defaultFaqs } from "@/lib/data";
 
 export function Faq() {
+  const faqs = defaultFaqs;
+
   return (
     <section className="pt-8 pb-16 md:pt-12 md:pb-12 bg-background">
       <div className="container max-w-4xl">
@@ -14,7 +16,7 @@ export function Faq() {
           Frequently Asked Questions
         </h2>
         <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq, index) => (
+          {faqs.map((faq: any, index: number) => (
             <AccordionItem value={`item-${index}`} key={index}>
               <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
               <AccordionContent className="text-base text-muted-foreground">

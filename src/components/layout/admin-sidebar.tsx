@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import Image from "next/image";
 import { LayoutDashboard, ShoppingCart, Package, Users, Pencil, Home, Menu, Bot, Shapes, AreaChart, MessageSquareQuote, Truck, LogOut, User } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useSidebar, SidebarTrigger, SidebarClose } from "@/components/ui/sidebar";
@@ -21,7 +22,6 @@ const adminNavItems = [
   { href: "/admin/customers", label: "Customers", icon: <Users /> },
   { href: "/admin/shipping", label: "Shipping", icon: <Truck /> },
   { href: "/admin/inquiries", label: "Inquiries", icon: <MessageSquareQuote /> },
-  { href: "/admin/content", label: "Content", icon: <Pencil /> },
   { href: "/admin/profile", label: "Profile", icon: <User /> },
 ];
 
@@ -94,7 +94,9 @@ export function AdminSidebar() {
         <div className="flex h-full flex-col gap-2">
           <div className="flex h-16 items-center border-b px-6">
             <Link href="/admin" className="flex items-center gap-2 font-semibold">
-              <Bot className="h-6 w-6 text-primary" />
+              <div className="relative h-8 w-8">
+                <Image src="/logo.png" alt="Rodelas Lifestyle" fill className="object-contain" />
+              </div>
               <span className="">Admin Panel</span>
             </Link>
           </div>
@@ -113,7 +115,9 @@ function AdminMobileSidebar() {
       <SheetContent side="left" className="p-0 w-64 flex flex-col">
         <SheetHeader className="h-16 flex flex-row items-center justify-between border-b px-6">
           <Link href="/admin" className="flex items-center gap-2 font-semibold">
-            <Bot className="h-6 w-6 text-primary" />
+            <div className="relative h-8 w-8">
+              <Image src="/logo.png" alt="Rodelas Lifestyle" fill className="object-contain" />
+            </div>
             <span>Admin Panel</span>
           </Link>
           <SheetTitle className="sr-only">Admin Menu</SheetTitle>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Search, ShoppingCart, Menu, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -19,6 +20,7 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -50,8 +52,11 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
-          <Link href="/" className="text-xl font-bold tracking-wide">
-            Rodelas lifestyle
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative h-10 w-10">
+              <Image src="/logo.png" alt="Rodelas Lifestyle" fill className="object-contain" />
+            </div>
+            <span className="text-xl font-bold tracking-wide hidden sm:inline-block">Rodelas lifestyle</span>
           </Link>
         </div>
 
@@ -140,8 +145,11 @@ export function Header() {
               <SheetContent side="left">
                 <div className="flex flex-col gap-4 p-4">
                   <SheetClose asChild>
-                    <Link href="/" className="text-lg font-bold">
-                      Rodelas lifestyle
+                    <Link href="/" className="text-lg font-bold flex items-center gap-2">
+                      <div className="relative h-8 w-8">
+                        <Image src="/logo.png" alt="Rodelas Lifestyle" fill className="object-contain" />
+                      </div>
+                      <span>Rodelas lifestyle</span>
                     </Link>
                   </SheetClose>
                   <nav className="flex flex-col gap-3">

@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
-  const imageUrl = 'https://picsum.photos/seed/placeholder/1920/800';
+  const imageUrl = '/images/hero-banner.png';
   const heading = "Elegance in Every Thread";
   const description = "Discover our exclusive collection of premium apparel and lifestyle products.";
 

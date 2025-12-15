@@ -295,7 +295,7 @@ export default function AdminOrdersPage() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-red-600"
-                              onSelect={() => setOrderToDelete(order.id)}
+                              onSelect={() => setTimeout(() => setOrderToDelete(order.id), 100)}
                             >
                               Delete
                             </DropdownMenuItem>

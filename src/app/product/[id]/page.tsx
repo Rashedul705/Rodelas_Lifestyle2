@@ -76,13 +76,8 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
-  // For gallery, we'll just use the main product image multiple times as placeholders
-  const galleryImages = [
-    product.image,
-    product.image.replace(/seed\/\w+/, `seed/${product.id}A`),
-    product.image.replace(/seed\/\w+/, `seed/${product.id}B`),
-    product.image.replace(/seed\/\w+/, `seed/${product.id}C`),
-  ];
+  // Use product.images if available, otherwise fallback to the single product.image
+  const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
   const handleThumbnailClick = (index: number) => {
     api?.scrollTo(index);
@@ -95,30 +90,32 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div className="w-full mx-auto flex gap-4">
-              {/* Thumbnails - Left Side */}
-              <div className="flex flex-col gap-2 w-[20%]">
-                {galleryImages.map((img, index) => (
-                  <div
-                    key={index}
-                    className={`aspect-[3/4] relative rounded-md overflow-hidden border-2 ${index === current ? 'border-primary' : 'border-transparent'
-                      } cursor-pointer hover:opacity-80 transition-opacity`}
-                    onClick={() => handleThumbnailClick(index)}
-                  >
-                    <Image
-                      src={img}
-                      alt={`Thumbnail ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="20vw"
-                    />
-                  </div>
-                ))}
-              </div>
+              {/* Thumbnails - Left Side (Only show if > 1 image) */}
+              {galleryImages.length > 1 && (
+                <div className="flex flex-col gap-2 w-[20%]">
+                  {galleryImages.map((img, index) => (
+                    <div
+                      key={index}
+                      className={`aspect-[3/4] relative rounded-md overflow-hidden border-2 ${index === current ? 'border-primary' : 'border-transparent'
+                        } cursor-pointer hover:opacity-80 transition-opacity`}
+                      onClick={() => handleThumbnailClick(index)}
+                    >
+                      <Image
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="20vw"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
 
 
               {/* Main Image - Right Side */}
-              <div className="w-[80%]">
+              <div className={galleryImages.length > 1 ? "w-[80%]" : "w-full"}>
                 <Carousel setApi={setApi} className="w-full">
                   <CarouselContent>
                     {galleryImages.map((img, index) => (
@@ -135,8 +132,12 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className="left-2" />
-                  <CarouselNext className="right-2" />
+                  {galleryImages.length > 1 && (
+                    <>
+                      <CarouselPrevious className="left-2" />
+                      <CarouselNext className="right-2" />
+                    </>
+                  )}
                 </Carousel>
               </div>
             </div>

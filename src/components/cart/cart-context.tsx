@@ -1,7 +1,7 @@
 "use client";
 
 import type { Product } from "@/lib/data";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export type CartItem = {
@@ -23,6 +23,23 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const { toast } = useToast();
+
+  // Load cart from local storage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch (error) {
+        console.error("Failed to parse cart from local storage:", error);
+      }
+    }
+  }, []);
+
+  // Save cart to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const getItem = (productId: string) => {
     return cart.find((item) => item.product.id === productId);
@@ -67,14 +84,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : item
         );
       }
-      
+
       if (quantity > product.stock) {
         setTimeout(() => {
-            toast({
-                variant: "destructive",
-                title: "Stock limit reached",
-                description: `You can only add up to ${product.stock} of ${product.name}.`,
-            });
+          toast({
+            variant: "destructive",
+            title: "Stock limit reached",
+            description: `You can only add up to ${product.stock} of ${product.name}.`,
+          });
         }, 0);
         return [...prevCart, { product, quantity: product.stock }];
       }
@@ -91,12 +108,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const removeFromCart = (productId: string) => {
     setCart((prevCart) => prevCart.filter((item) => item.product.id !== productId));
-     setTimeout(() => {
-        toast({
-          title: "Removed from cart",
-          variant: "destructive",
-        });
-     }, 0);
+    setTimeout(() => {
+      toast({
+        title: "Removed from cart",
+        variant: "destructive",
+      });
+    }, 0);
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -104,13 +121,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!item) return;
 
     if (quantity > item.product.stock) {
-        setTimeout(() => {
-            toast({
-                variant: "destructive",
-                title: "Stock limit reached",
-                description: `You can only add up to ${item.product.stock} of ${item.product.name}.`,
-            });
-        }, 0);
+      setTimeout(() => {
+        toast({
+          variant: "destructive",
+          title: "Stock limit reached",
+          description: `You can only add up to ${item.product.stock} of ${item.product.name}.`,
+        });
+      }, 0);
       setCart((prevCart) =>
         prevCart.map((cartItem) =>
           cartItem.product.id === productId ? { ...cartItem, quantity: item.product.stock } : cartItem
@@ -129,7 +146,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       )
     );
   };
-  
+
   const clearCart = () => {
     setCart([]);
   }

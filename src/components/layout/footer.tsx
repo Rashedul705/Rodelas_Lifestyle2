@@ -30,22 +30,22 @@ export function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wider">Shop</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#categories" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#categories" className="text-muted-foreground hover:text-foreground">
                   New Arrivals
                 </Link>
               </li>
               <li>
-                <Link href="#categories" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#categories" className="text-muted-foreground hover:text-foreground">
                   Bestsellers
                 </Link>
               </li>
               <li>
-                <Link href="#categories" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#categories" className="text-muted-foreground hover:text-foreground">
                   Categories
                 </Link>
               </li>
               <li>
-                <Link href="#categories" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#categories" className="text-muted-foreground hover:text-foreground">
                   Sale
                 </Link>
               </li>
@@ -56,22 +56,22 @@ export function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wider">Help</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#contact" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#contact" className="text-muted-foreground hover:text-foreground">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="#faq" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#faq" className="text-muted-foreground hover:text-foreground">
                   Shipping & Returns
                 </Link>
               </li>
               <li>
-                <Link href="#faq" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#faq" className="text-muted-foreground hover:text-foreground">
                   Size Guide
                 </Link>
               </li>
               <li>
-                <Link href="#faq" className="text-muted-foreground hover:text-foreground">
+                <Link href="/#faq" className="text-muted-foreground hover:text-foreground">
                   FAQ
                 </Link>
               </li>

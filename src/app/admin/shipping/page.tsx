@@ -26,14 +26,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -51,10 +51,10 @@ type ShippingMethod = {
 };
 
 const initialMethods: ShippingMethod[] = [
-    { id: 'sm-1', name: 'Inside Rajshahi', cost: 60, estimatedTime: '24-48 Hours', isActive: true },
-    { id: 'sm-2', name: 'Inside Dhaka', cost: 120, estimatedTime: '2-3 Days', isActive: true },
-    { id: 'sm-3', name: 'Nationwide (Outside Dhaka)', cost: 150, estimatedTime: '3-5 Days', isActive: true },
-    { id: 'sm-4', name: 'Express Delivery (Dhaka Only)', cost: 250, estimatedTime: '24 Hours', isActive: false },
+  { id: 'sm-1', name: 'Inside Rajshahi', cost: 60, estimatedTime: '24-48 Hours', isActive: true },
+  { id: 'sm-2', name: 'Inside Dhaka', cost: 90, estimatedTime: '2-3 Days', isActive: true },
+  { id: 'sm-3', name: 'Nationwide (Outside Dhaka)', cost: 120, estimatedTime: '3-5 Days', isActive: true },
+  { id: 'sm-4', name: 'Express Delivery (Dhaka Only)', cost: 250, estimatedTime: '24 Hours', isActive: false },
 ];
 
 export default function AdminShippingPage() {
@@ -63,7 +63,7 @@ export default function AdminShippingPage() {
   const [editingMethod, setEditingMethod] = useState<ShippingMethod | null>(null);
   const [methodToDelete, setMethodToDelete] = useState<ShippingMethod | null>(null);
   const { toast } = useToast();
-  
+
   const handleOpenForm = (method: ShippingMethod | null = null) => {
     setEditingMethod(method);
     setIsFormOpen(true);
@@ -73,7 +73,7 @@ export default function AdminShippingPage() {
     setEditingMethod(null);
     setIsFormOpen(false);
   };
-  
+
   const handleSaveMethod = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -83,22 +83,22 @@ export default function AdminShippingPage() {
     const isActive = formData.get('isActive') === 'on';
 
     if (!name || isNaN(cost)) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Method name and a valid cost are required.' });
-        return;
+      toast({ variant: 'destructive', title: 'Error', description: 'Method name and a valid cost are required.' });
+      return;
     }
-    
+
     if (editingMethod) {
-      setMethods(methods.map(m => 
+      setMethods(methods.map(m =>
         m.id === editingMethod.id ? { ...editingMethod, name, cost, estimatedTime, isActive } : m
       ));
       toast({ title: 'Success', description: 'Shipping method updated successfully.' });
     } else {
       const newMethod: ShippingMethod = {
-          id: `sm-${Date.now()}`,
-          name,
-          cost,
-          estimatedTime,
-          isActive
+        id: `sm-${Date.now()}`,
+        name,
+        cost,
+        estimatedTime,
+        isActive
       };
       setMethods([...methods, newMethod]);
       toast({ title: 'Success', description: 'New shipping method added.' });
@@ -113,7 +113,7 @@ export default function AdminShippingPage() {
   }
 
   const handleStatusToggle = (methodId: string, isActive: boolean) => {
-      setMethods(methods.map(m => m.id === methodId ? { ...m, isActive } : m));
+    setMethods(methods.map(m => m.id === methodId ? { ...m, isActive } : m));
   }
 
   return (
@@ -152,19 +152,19 @@ export default function AdminShippingPage() {
                     <TableCell>BDT {method.cost.toLocaleString()}</TableCell>
                     <TableCell>{method.estimatedTime}</TableCell>
                     <TableCell>
-                        <Switch
-                            checked={method.isActive}
-                            onCheckedChange={(checked) => handleStatusToggle(method.id, checked)}
-                            aria-label="Toggle method status"
-                        />
+                      <Switch
+                        checked={method.isActive}
+                        onCheckedChange={(checked) => handleStatusToggle(method.id, checked)}
+                        aria-label="Toggle method status"
+                      />
                     </TableCell>
                     <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" onClick={() => handleOpenForm(method)}>
-                            <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600" onClick={() => setMethodToDelete(method)}>
-                            <Trash className="h-4 w-4" />
-                        </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleOpenForm(method)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600" onClick={() => setMethodToDelete(method)}>
+                        <Trash className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -173,7 +173,7 @@ export default function AdminShippingPage() {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Add/Edit Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="sm:max-w-[480px]">
@@ -201,15 +201,15 @@ export default function AdminShippingPage() {
                 <Label htmlFor="estimatedTime" className="text-right">
                   Est. Time
                 </Label>
-                <Input id="estimatedTime" name="estimatedTime" defaultValue={editingMethod?.estimatedTime} className="col-span-3" placeholder="e.g., 2-3 Days"/>
+                <Input id="estimatedTime" name="estimatedTime" defaultValue={editingMethod?.estimatedTime} className="col-span-3" placeholder="e.g., 2-3 Days" />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                 <Label htmlFor="isActive" className="text-right">
+                <Label htmlFor="isActive" className="text-right">
                   Is Active
                 </Label>
-                 <div className="col-span-3">
-                    <Switch id="isActive" name="isActive" defaultChecked={editingMethod?.isActive ?? true} />
-                 </div>
+                <div className="col-span-3">
+                  <Switch id="isActive" name="isActive" defaultChecked={editingMethod?.isActive ?? true} />
+                </div>
               </div>
             </div>
             <DialogFooter>
@@ -219,7 +219,7 @@ export default function AdminShippingPage() {
           </form>
         </DialogContent>
       </Dialog>
-      
+
       {/* Delete Confirmation */}
       <AlertDialog open={!!methodToDelete} onOpenChange={() => setMethodToDelete(null)}>
         <AlertDialogContent>

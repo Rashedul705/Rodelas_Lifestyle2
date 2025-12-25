@@ -73,6 +73,8 @@ export default function CheckoutPage() {
     useEffect(() => {
         if (selectedCity === 'Rajshahi') {
             setShippingCharge(60);
+        } else if (selectedCity === 'Dhaka') {
+            setShippingCharge(90);
         } else if (selectedCity) {
             setShippingCharge(120);
         } else {

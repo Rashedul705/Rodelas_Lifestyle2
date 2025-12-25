@@ -16,6 +16,7 @@ export type Product = {
   imageHint: string;
   category: string;
   stock: number;
+  sizeGuide?: string;
 };
 
 export type Category = {

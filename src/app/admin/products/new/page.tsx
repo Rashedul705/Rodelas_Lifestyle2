@@ -47,6 +47,7 @@ const formSchema = z.object({
   name: z.string().min(1, 'Product name is required.'),
   highlights: z.string().min(1, 'Product highlights are required.'),
   description: z.string().min(1, 'Product description is required.'),
+  sizeGuide: z.string().optional(),
   price: z.coerce.number().positive('Price must be a positive number.'),
   stock: z.coerce.number().int().nonnegative('Stock must be a non-negative integer.'),
   category: z.string().min(1, 'Please select a category.'),
@@ -74,6 +75,7 @@ export default function AdminNewProductPage() {
       name: '',
       highlights: '',
       description: '',
+      sizeGuide: '',
       price: 0,
       stock: 0,
       category: '',
@@ -174,6 +176,7 @@ export default function AdminNewProductPage() {
         name: values.name,
         highlights: values.highlights,
         description: values.description,
+        sizeGuide: values.sizeGuide,
         price: Number(values.price),
         stock: Number(values.stock),
         category: values.category,
@@ -264,6 +267,23 @@ export default function AdminNewProductPage() {
                               <Textarea
                                 placeholder="A great description for a new product."
                                 className="min-h-32"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="sizeGuide"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Size Guide (Optional)</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Enter size guide details (e.g. S: 36, M: 38, L: 40)..."
+                                className="min-h-24"
                                 {...field}
                               />
                             </FormControl>

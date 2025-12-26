@@ -17,6 +17,7 @@ export type Product = {
   category: string;
   stock: number;
   sizeGuide?: string;
+  size?: string;
 };
 
 export type Category = {
@@ -75,6 +76,7 @@ export const products: Product[] = [
     category: 'three-piece',
     stock: 10,
     sizeGuide: "Small: Chest 36, Length 40\nMedium: Chest 38, Length 42\nLarge: Chest 40, Length 44",
+    size: "Medium",
   },
   {
     id: '2',
@@ -91,6 +93,7 @@ export const products: Product[] = [
     imageHint: 'Woman in grey floral three piece side view',
     category: 'three-piece',
     stock: 5,
+    size: "Large",
   },
   {
     id: '3',
@@ -107,6 +110,7 @@ export const products: Product[] = [
     imageHint: 'Woman in grey floral three piece sitting',
     category: 'three-piece',
     stock: 15,
+    size: "Small",
   },
   {
     id: '9',
@@ -123,6 +127,7 @@ export const products: Product[] = [
     imageHint: 'Woman in cream floral three piece',
     category: 'three-piece',
     stock: 8,
+    size: "Medium",
   },
   {
     id: '10',
@@ -139,6 +144,7 @@ export const products: Product[] = [
     imageHint: 'Woman in black floral khimar',
     category: 'plazo-khimar-set',
     stock: 10,
+    size: "Free Size",
   },
   {
     id: '11',
@@ -155,6 +161,7 @@ export const products: Product[] = [
     imageHint: 'Woman in blue floral khimar',
     category: 'plazo-khimar-set',
     stock: 10,
+    size: "Free Size",
   },
   {
     id: '12',
@@ -171,6 +178,7 @@ export const products: Product[] = [
     imageHint: 'Woman in black and brown abstract khimar',
     category: 'plazo-khimar-set',
     stock: 10,
+    size: "Free Size",
   },
   {
     id: '13',
@@ -187,6 +195,7 @@ export const products: Product[] = [
     imageHint: 'Woman in black and yellow floral khimar',
     category: 'plazo-khimar-set',
     stock: 10,
+    size: "Free Size",
   },
   {
     id: '14',
@@ -203,6 +212,7 @@ export const products: Product[] = [
     imageHint: 'Woman in black and orange floral khimar',
     category: 'plazo-khimar-set',
     stock: 10,
+    size: "Free Size",
   },
   {
     id: '15',
@@ -219,6 +229,7 @@ export const products: Product[] = [
     imageHint: 'Woman in cream floral three piece sitting',
     category: 'three-piece',
     stock: 10,
+    size: "Unstitched",
   },
   {
     id: '16',
@@ -235,6 +246,7 @@ export const products: Product[] = [
     imageHint: 'Woman in blue floral three piece',
     category: 'three-piece',
     stock: 10,
+    size: "Unstitched",
   },
   {
     id: '17',
@@ -251,6 +263,7 @@ export const products: Product[] = [
     imageHint: 'Woman in teal three piece garden',
     category: 'three-piece',
     stock: 10,
+    size: "Unstitched",
   },
   {
     id: '18',
@@ -267,6 +280,7 @@ export const products: Product[] = [
     imageHint: 'Woman in cyan three piece garden',
     category: 'three-piece',
     stock: 10,
+    size: "Unstitched",
   },
   {
     id: '19',
@@ -283,6 +297,7 @@ export const products: Product[] = [
     imageHint: 'Woman in sky blue three piece',
     category: 'three-piece',
     stock: 10,
+    size: "Unstitched",
   },
   {
     id: '20',

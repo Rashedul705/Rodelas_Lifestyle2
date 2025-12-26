@@ -48,6 +48,7 @@ const formSchema = z.object({
   highlights: z.string().min(1, 'Product highlights are required.'),
   description: z.string().min(1, 'Product description is required.'),
   sizeGuide: z.string().optional(),
+  size: z.string().optional(),
   price: z.coerce.number().positive('Price must be a positive number.'),
   stock: z.coerce.number().int().nonnegative('Stock must be a non-negative integer.'),
   category: z.string().min(1, 'Please select a category.'),
@@ -76,6 +77,7 @@ export default function AdminNewProductPage() {
       highlights: '',
       description: '',
       sizeGuide: '',
+      size: '',
       price: 0,
       stock: 0,
       category: '',
@@ -177,6 +179,7 @@ export default function AdminNewProductPage() {
         highlights: values.highlights,
         description: values.description,
         sizeGuide: values.sizeGuide,
+        size: values.size,
         price: Number(values.price),
         stock: Number(values.stock),
         category: values.category,
@@ -299,29 +302,47 @@ export default function AdminNewProductPage() {
                     <CardTitle>Inventory</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid gap-6">
+                      <div className="grid grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Price (BDT)</FormLabel>
+                              <FormControl>
+                                <Input type="number" step="0.01" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="stock"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Stock</FormLabel>
+                              <FormControl>
+                                <Input type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       <FormField
                         control={form.control}
-                        name="price"
+                        name="size"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Price (BDT)</FormLabel>
+                            <FormLabel>Size / Variant</FormLabel>
                             <FormControl>
-                              <Input type="number" step="0.01" {...field} />
+                              <Input placeholder="e.g. Free Size, or S, M, L" {...field} />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="stock"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Stock</FormLabel>
-                            <FormControl>
-                              <Input type="number" {...field} />
-                            </FormControl>
+                            <FormDescription>
+                              Enter available sizes or a single size (optional).
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}

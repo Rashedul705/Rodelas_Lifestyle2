@@ -23,6 +23,15 @@ import { Button } from '@/components/ui/button';
 import { Plus, Minus, Ruler } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 
 // Even in a client component, params can be a promise.
 // We can use `React.use` to unwrap it.
@@ -152,6 +161,14 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                 BDT {product.price.toLocaleString()}
               </p>
 
+              {product.size && (
+                <div className="mt-4">
+                  <Badge variant="secondary" className="text-base px-3 py-1">
+                    Size: {product.size}
+                  </Badge>
+                </div>
+              )}
+
               {product.stock > 0 ? (
                 <div className="mt-8 space-y-4">
                   <div className="flex items-center gap-2">
@@ -188,14 +205,26 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
                     <p className="text-sm text-muted-foreground">(in stock)</p>
                   </div>
 
-                  <div className="mb-6 p-4 bg-muted/30 rounded-lg border">
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
-                      <Ruler className="w-4 h-4" />
-                      Size Guide
-                    </h3>
-                    <div className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
-                      {product.sizeGuide || DEFAULT_SIZE_GUIDE}
-                    </div>
+                  <div className="mb-6">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="link" className="p-0 h-auto font-semibold mb-2 flex items-center gap-2 text-primary hover:text-primary/80 hover:no-underline">
+                          <Ruler className="w-4 h-4" />
+                          Size Guide
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Size Guide</DialogTitle>
+                          <DialogDescription>
+                            Measurements for {product.name}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed mt-4">
+                          {product.sizeGuide || DEFAULT_SIZE_GUIDE}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-2">
